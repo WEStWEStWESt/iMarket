@@ -1,6 +1,9 @@
 
+-- Entities
+
 CREATE TABLE IF NOT EXISTS authorized_users (
   id                      BIGSERIAL      NOT NULL,
+  role_id                 BIGINT         NOT NULL,
   username                VARCHAR(50)    NOT NULL    UNIQUE,
   password                VARCHAR(12)    NOT NULL    UNIQUE,
 
@@ -16,6 +19,8 @@ CREATE TABLE IF NOT EXISTS roles (
 
 CREATE TABLE IF NOT EXISTS profiles (
   id                      BIGSERIAL      NOT NULL,
+  user_id                 BIGINT         NOT NULL,
+  coupon_id               BIGINT         NOT NULL,
   profilename             VARCHAR(50)    NOT NULL    UNIQUE,
   email                   VARCHAR(50),
   phone                   VARCHAR(30),
@@ -35,7 +40,8 @@ CREATE TABLE IF NOT EXISTS coupons (
 
 CREATE TABLE IF NOT EXISTS carts (
   id                      BIGSERIAL      NOT NULL,
-  customer_id             BIGINT         NOT NULL,
+  profile_id              BIGINT         NOT NULL,
+  product_id              BIGINT         NOT NULL,
   payment                 VARCHAR(10),
   delivery                VARCHAR(10),
   opend_date              DATE,
@@ -76,3 +82,22 @@ CREATE TABLE IF NOT EXISTS products (
   PRIMARY KEY (id)
 );
 
+
+-- Foreign keys
+
+ALTER TABLE authorized_users
+  ADD FOREIGN KEY (role_id) REFERENCES roles(id);
+
+ALTER TABLE profiles
+  ADD FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  ADD FOREIGN KEY (coupon_id) REFERENCES coupons(id);
+
+ALTER TABLE carts
+  ADD FOREIGN KEY (profile_id) REFERENCES profiles(id),
+  ADD FOREIGN KEY (product_id) REFERENCES products(id);
+
+ALTER TABLE groups
+  ADD FOREIGN KEY (category_id) REFERENCES categories(id);
+
+ALTER TABLE products
+  ADD FOREIGN KEY (group_id) REFERENCES groups(id);
