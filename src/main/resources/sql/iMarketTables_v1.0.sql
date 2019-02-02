@@ -3,7 +3,6 @@
 
 CREATE TABLE IF NOT EXISTS authorized_users (
   id                      BIGSERIAL      NOT NULL,
-  role_id                 BIGINT         NOT NULL,
   username                VARCHAR(50)    NOT NULL    UNIQUE,
   password                VARCHAR(12)    NOT NULL    UNIQUE,
 
@@ -84,9 +83,6 @@ CREATE TABLE IF NOT EXISTS products (
 
 
 -- Foreign keys
-
-ALTER TABLE authorized_users
-  ADD FOREIGN KEY (role_id) REFERENCES roles(id);
 
 ALTER TABLE profiles
   ADD FOREIGN KEY (user_id) REFERENCES authorized_users(id) ON DELETE CASCADE,
