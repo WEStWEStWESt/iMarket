@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS roles (
 
 CREATE TABLE IF NOT EXISTS profiles (
   id              BIGSERIAL      NOT NULL,
-  name            VARCHAR(50)    NOT NULL    UNIQUE,
+  profilename     VARCHAR(50)    NOT NULL    UNIQUE,
   email           VARCHAR(50),
   phone           VARCHAR(30),
   address         VARCHAR(255),
@@ -44,6 +44,21 @@ CREATE TABLE IF NOT EXISTS carts (
   paid_date       DATE,
   sent_date       DATE,
   got_date        DATE,
+
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS categories (
+  id              BIGSERIAL      NOT NULL,
+  categoryname    VARCHAR(255)   NOT NULL    UNIQUE,
+
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS groups (
+  id              BIGSERIAL      NOT NULL,
+  groupname       VARCHAR(255)   NOT NULL    UNIQUE,
+  category_id     BIGINT         NOT NULL,
 
   PRIMARY KEY (id)
 );
