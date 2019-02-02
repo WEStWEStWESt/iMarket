@@ -25,5 +25,26 @@ CREATE TABLE IF NOT EXISTS profiles (
   PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS coupons (
+  id              BIGSERIAL      NOT NULL,
+  description     VARCHAR(255)   NOT NULL    UNIQUE,
+  sum             BIGINT,
 
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS carts (
+  id              BIGSERIAL      NOT NULL,
+  customer_id     BIGINT         NOT NULL,
+  store_status    VARCHAR(6),
+  payment         VARCHAR(10),
+  delivery        VARCHAR(10),
+  opend_date      DATE,
+  closed_date     DATE,
+  paid_date       DATE,
+  sent_date       DATE,
+  got_date        DATE,
+
+  PRIMARY KEY (id)
+);
 
