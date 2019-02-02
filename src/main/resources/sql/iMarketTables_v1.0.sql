@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS authorized_users (
 CREATE TABLE IF NOT EXISTS roles (
   id                      BIGSERIAL      NOT NULL,
   rolename                VARCHAR(50)    NOT NULL    UNIQUE,
+  description             TEXT,
 
   PRIMARY KEY (id)
 );

@@ -19,6 +19,8 @@ public class Role extends BaseEntity {
     @Column(name = "rolename", length = 8, nullable = false, unique = true)
     private RoleType roleName;
 
+    private String description;
+
     @ManyToMany
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"),
                                      inverseJoinColumns = @JoinColumn(name = "role_id"))
