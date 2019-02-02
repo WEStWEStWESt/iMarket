@@ -89,7 +89,7 @@ ALTER TABLE authorized_users
   ADD FOREIGN KEY (role_id) REFERENCES roles(id);
 
 ALTER TABLE profiles
-  ADD FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  ADD FOREIGN KEY (user_id) REFERENCES authorized_users(id) ON DELETE CASCADE,
   ADD FOREIGN KEY (coupon_id) REFERENCES coupons(id);
 
 ALTER TABLE carts
