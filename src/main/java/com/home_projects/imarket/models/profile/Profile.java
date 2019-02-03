@@ -1,6 +1,7 @@
 package com.home_projects.imarket.models.profile;
 
 import com.home_projects.imarket.models.BaseEntity;
+import com.home_projects.imarket.models.cart.Cart;
 import com.home_projects.imarket.models.coupon.Coupon;
 import com.home_projects.imarket.models.user.AuthorizedUser;
 import lombok.AllArgsConstructor;
@@ -43,4 +44,8 @@ public class Profile extends BaseEntity {
 
     @ManyToMany(mappedBy = "profiles")
     private Set<Coupon> coupons;
+
+    @OneToMany(mappedBy = "profile")
+    private Set<Cart> carts;
+
 }
