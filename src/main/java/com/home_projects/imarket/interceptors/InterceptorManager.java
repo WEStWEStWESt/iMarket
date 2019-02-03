@@ -27,5 +27,5 @@ public class InterceptorManager {
         log.info(entity.getClass().getTypeName() + " removing initiated...");
     }
 
-    // TODO add method that return interceptors for class interceptFor(Class<? extends Interceptor> type)
+    // TODO add @PostConstruct method that return interceptors for class interceptFor(Class<? extends Interceptor> type)
 }
