@@ -3,6 +3,7 @@ package com.home_projects.imarket.models.cart;
 import com.home_projects.imarket.models.BaseEntity;
 import com.home_projects.imarket.models.cart.enums.DeliveryType;
 import com.home_projects.imarket.models.cart.enums.PaymentType;
+import com.home_projects.imarket.models.product.Product;
 import com.home_projects.imarket.models.profile.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Data
 @Entity
@@ -47,5 +49,9 @@ public class Cart extends BaseEntity {
     @JoinColumn(name = "profile_id")
     private Profile profile;
 
-    // TODO add @ManyToMany product references
+    @ManyToMany
+    @JoinTable(name = "carts_products",
+               joinColumns = @JoinColumn(name = "cart_id"),
+               inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private Set<Product> products;
 }

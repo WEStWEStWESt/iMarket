@@ -71,10 +71,10 @@ CREATE TABLE IF NOT EXISTS groups (
 CREATE TABLE IF NOT EXISTS products (
   id                      BIGSERIAL      NOT NULL,
   group_id                BIGINT         NOT NULL,
-  productname             VARCHAR(255),
+  productname             VARCHAR(255)   NOT NULL    UNIQUE,
   description_short       VARCHAR(255),
   description_full        TEXT,
-  price                   MONEY,
+  price                   BIGINT         NOT NULL,
   picture                 TEXT,
   store_status            VARCHAR(6),
   discount                FLOAT,
