@@ -1,16 +1,14 @@
 package com.home_projects.imarket.models.user;
 
 import com.home_projects.imarket.models.BaseEntity;
+import com.home_projects.imarket.models.profile.Profile;
 import com.home_projects.imarket.models.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 @Data
@@ -30,6 +28,6 @@ public class AuthorizedUser extends BaseEntity {
     @ManyToMany(mappedBy = "users")
     private Set<Role> roles;
 
-    // TODO add profile @OneToOne reference;
-
+    @OneToOne(mappedBy = "user")
+    private Profile profile;
 }

@@ -1,6 +1,7 @@
 package com.home_projects.imarket.models.profile;
 
 import com.home_projects.imarket.models.BaseEntity;
+import com.home_projects.imarket.models.coupon.Coupon;
 import com.home_projects.imarket.models.user.AuthorizedUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnTransformer;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @Entity
