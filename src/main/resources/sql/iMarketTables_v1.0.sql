@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS roles (
 CREATE TABLE IF NOT EXISTS profiles (
   id                      BIGSERIAL      NOT NULL,
   user_id                 BIGINT         NOT NULL,
-  coupon_id               BIGINT         NOT NULL,
+  coupon_id               BIGINT,
   profilename             VARCHAR(50)    NOT NULL    UNIQUE,
   email                   VARCHAR(50),
   phone                   VARCHAR(30),

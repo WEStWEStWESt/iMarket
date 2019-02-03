@@ -1,4 +1,4 @@
-package com.home_projects.imarket.models.user.enums;
+package com.home_projects.imarket.models.role.enums;
 
 public enum RoleType {
     CUSTOMER,

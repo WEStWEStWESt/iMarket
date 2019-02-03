@@ -1,7 +1,8 @@
-package com.home_projects.imarket.models.user;
+package com.home_projects.imarket.models.role;
 
 import com.home_projects.imarket.models.BaseEntity;
-import com.home_projects.imarket.models.user.enums.RoleType;
+import com.home_projects.imarket.models.role.enums.RoleType;
+import com.home_projects.imarket.models.user.AuthorizedUser;
 import lombok.*;
 
 import javax.persistence.*;

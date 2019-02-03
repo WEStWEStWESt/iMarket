@@ -1,6 +1,7 @@
 package com.home_projects.imarket.models.user;
 
 import com.home_projects.imarket.models.BaseEntity;
+import com.home_projects.imarket.models.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,13 +21,15 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class AuthorizedUser extends BaseEntity {
 
-    @Column(length = 50, nullable = false, unique = true)
-    private String username;
+    @Column(name = "username", length = 50, nullable = false, unique = true)
+    private String userName;
 
     @Column(length = 12, nullable = false)
     private String password;
 
     @ManyToMany(mappedBy = "users")
     private Set<Role> roles;
+
+    // TODO add profile @OneToOne reference;
 
 }
