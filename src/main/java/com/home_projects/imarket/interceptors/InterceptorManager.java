@@ -3,14 +3,19 @@ package com.home_projects.imarket.interceptors;
 import com.home_projects.imarket.interceptors.annotations.EntityInterceptor;
 import com.home_projects.imarket.interceptors.interfaces.*;
 import com.home_projects.imarket.models.BaseEntity;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.util.Properties;
+
 @Component
 public class InterceptorManager {
-    @Autowired
-    private ApplicationContext context;
+    @Getter private Properties validationProperties;
+    @Autowired private ApplicationContext context;
 
     public void onInit(BaseEntity entity) {
         execute(entity, InitializationInterceptor.class);
@@ -38,6 +43,14 @@ public class InterceptorManager {
                 .forEach(interceptor -> interceptor.execute(entity));
     }
 
-
-    // TODO add @PostConstruct method that return interceptors for class interceptFor(Class<? extends Interceptor> type)
+    @PostConstruct
+    private void resolveProperties() {
+        String propertyFile = "validation.properties";
+        validationProperties = new Properties();
+        try {
+            validationProperties.load(context.getClassLoader().getResourceAsStream(propertyFile));
+        } catch (IOException e) {
+            throw new RuntimeException("Validation properties not found: " + propertyFile);
+        }
+    }
 }
