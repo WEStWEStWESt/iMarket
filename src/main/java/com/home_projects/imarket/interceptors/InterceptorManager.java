@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
 
 @Component
@@ -48,8 +49,8 @@ public class InterceptorManager {
         String propertyFile = "validation.properties";
         validationProperties = new Properties();
         try {
-            validationProperties.load(context.getClassLoader().getResourceAsStream(propertyFile));
-        } catch (IOException e) {
+            validationProperties.load((Objects.requireNonNull(context.getClassLoader())).getResourceAsStream(propertyFile));
+        } catch (Exception e) {
             throw new RuntimeException("Validation properties not found: " + propertyFile);
         }
     }
