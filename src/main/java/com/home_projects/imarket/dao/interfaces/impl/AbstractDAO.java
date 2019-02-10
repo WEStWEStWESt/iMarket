@@ -1,11 +1,14 @@
 package com.home_projects.imarket.dao.interfaces.impl;
 
+import com.home_projects.imarket.interceptors.InterceptorManager;
 import com.home_projects.imarket.models.BaseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.ParameterizedType;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractDAO<T extends BaseEntity> {
+    @Autowired private InterceptorManager interceptorManager;
 
     Class<T> entityType() {
         String typeName = ((ParameterizedType) getClass()
@@ -22,9 +25,14 @@ public abstract class AbstractDAO<T extends BaseEntity> {
     T create(){
         Class<T> type = entityType();
         try {
-            return type.newInstance();
+            T t = type.newInstance();
+            interceptorManager.onInit(t);
+            return t;
         } catch (IllegalAccessException | InstantiationException e) {
             throw new RuntimeException("Cannot create instance of: " + type);
         }
     }
+
+    public abstract T save(T t);
+    public abstract boolean delete(T t);
 }

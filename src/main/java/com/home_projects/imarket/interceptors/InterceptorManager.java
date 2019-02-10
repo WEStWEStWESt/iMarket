@@ -9,7 +9,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.Objects;
 import java.util.Properties;
 

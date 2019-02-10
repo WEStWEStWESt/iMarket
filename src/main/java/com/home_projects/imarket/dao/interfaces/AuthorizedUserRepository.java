@@ -7,5 +7,4 @@ public interface AuthorizedUserRepository extends JpaRepository<AuthorizedUser, 
 
     AuthorizedUser findByUserName(String username);
     AuthorizedUser findByUserNameAndPassword(String username, String password);
-
 }
