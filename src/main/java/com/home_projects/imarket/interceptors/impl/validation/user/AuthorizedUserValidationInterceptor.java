@@ -17,5 +17,4 @@ public class AuthorizedUserValidationInterceptor extends AbstractValidationInter
             log.debug(typeName + " is valid.");
         }
     }
-
 }
