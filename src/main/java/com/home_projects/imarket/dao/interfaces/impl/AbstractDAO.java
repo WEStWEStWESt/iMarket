@@ -5,14 +5,19 @@ import com.home_projects.imarket.models.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
-@SuppressWarnings("unchecked")
+@Transactional
+@SuppressWarnings("All")
 public abstract class AbstractDAO<T extends BaseEntity> {
 
     @PersistenceContext private EntityManager entityManager;
@@ -58,6 +63,27 @@ public abstract class AbstractDAO<T extends BaseEntity> {
        return (T) entityManager.createQuery("FROM " + entityType + " WHERE id = " + id).getSingleResult();
     }
 
+    public List<T> getAll(List<Long> ids) {
+        return entityManager.createNativeQuery("SELECT * FROM " + tableName + " WHERE id IN "
+                + ids.stream()
+                     .map(Objects::toString)
+                     .collect(Collectors.joining(", ")), entityType)
+                     .getResultList();
+    }
+
     public abstract T save(T t);
+
     public abstract boolean delete(T t);
+
+    public boolean delete(Long id) {
+        return entityManager.createQuery("DELETE FROM " + entityType + " WHERE id = " + id).executeUpdate() == 1;
+    }
+
+    public boolean deleteAll(List<Long> ids) {
+        return entityManager.createNativeQuery("DELETE FROM " + tableName + " WHERE id IN "
+                + ids.stream()
+                     .map(Objects::toString)
+                     .collect(Collectors.joining(", ")) )
+                     .executeUpdate() == ids.size() - 1;
+    }
 }
