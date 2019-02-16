@@ -2,15 +2,29 @@ package com.home_projects.imarket.dao.interfaces.impl;
 
 import com.home_projects.imarket.interceptors.InterceptorManager;
 import com.home_projects.imarket.models.BaseEntity;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
+import javax.persistence.Table;
 import java.lang.reflect.ParameterizedType;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractDAO<T extends BaseEntity> {
+
     @Autowired private InterceptorManager interceptorManager;
 
-    Class<T> entityType() {
+    @Getter private Class<T> entityType;
+    @Getter(AccessLevel.PROTECTED) private String tableName;
+
+    @PostConstruct
+    public void init(){
+        entityType = entityType();
+        tableName = tableName();
+    }
+
+    private Class<T> entityType() {
         String typeName = ((ParameterizedType) getClass()
                 .getGenericSuperclass())
                 .getActualTypeArguments()[0]
@@ -22,7 +36,11 @@ public abstract class AbstractDAO<T extends BaseEntity> {
         }
     }
 
-    T create(){
+    private String tableName(){
+       return entityType.getAnnotation(Table.class).name();
+    }
+
+    public T create(){
         Class<T> type = entityType();
         try {
             T t = type.newInstance();
