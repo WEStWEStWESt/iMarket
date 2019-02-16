@@ -7,12 +7,15 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 import java.lang.reflect.ParameterizedType;
 
 @SuppressWarnings("unchecked")
 public abstract class AbstractDAO<T extends BaseEntity> {
 
+    @PersistenceContext private EntityManager entityManager;
     @Autowired private InterceptorManager interceptorManager;
 
     @Getter private Class<T> entityType;
@@ -49,6 +52,10 @@ public abstract class AbstractDAO<T extends BaseEntity> {
         } catch (IllegalAccessException | InstantiationException e) {
             throw new RuntimeException("Cannot create instance of: " + type);
         }
+    }
+
+    public T getOne(Long id){
+       return (T) entityManager.createQuery("FROM " + entityType + " WHERE id = " + id).getSingleResult();
     }
 
     public abstract T save(T t);
