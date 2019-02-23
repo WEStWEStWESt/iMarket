@@ -45,7 +45,7 @@ public class InterceptorManager {
 
     @PostConstruct
     private void resolveProperties() {
-        String propertyFile = "validation.properties";
+        String propertyFile = "properties/validation.properties";
         validationProperties = new Properties();
         try {
             validationProperties.load((Objects.requireNonNull(context.getClassLoader())).getResourceAsStream(propertyFile));
