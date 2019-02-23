@@ -2,6 +2,7 @@ package com.home_projects.imarket.interceptors.impl.validation;
 
 import com.home_projects.imarket.exceptions.ValidationException;
 import com.home_projects.imarket.interceptors.InterceptorManager;
+import com.home_projects.imarket.interceptors.annotations.EntityInterceptor;
 import com.home_projects.imarket.interceptors.interfaces.ValidationInterceptor;
 import com.home_projects.imarket.models.BaseEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -19,17 +20,26 @@ public abstract class AbstractValidationInterceptor implements ValidationInterce
     private InterceptorManager manager;
 
     protected <T extends BaseEntity> void validateFields(T entity, Pair<String, String>... pairs) {
-        String typeName = entity.getClass().getTypeName();
+        Class<? extends BaseEntity> type = entity.getClass();
+        String typeName = type.getTypeName();
+        String error;
         try {
             log.debug(typeName + " validation initiated...");
+            if (type != getClass().getAnnotation(EntityInterceptor.class).interceptorEntity()) {
+                error = "unexpected entity type - [" + typeName + "]";
+                log.error(error);
+                throw new ValidationException(error);
+            }
 
+            for (Pair<String, String> pair : pairs) {
+                validateField(pair.getFirst(), pair.getSecond(), entity);
+            }
 
             log.debug(typeName + " is valid.");
-
         } catch (Exception e) {
-            String s = "Validation error: " + e.getMessage();
-            log.error(s);
-            throw new ValidationException(s);
+            error = "Validation error: " + e.getMessage();
+            log.error(error);
+            throw new ValidationException(error);
         }
     }
 
@@ -59,5 +69,4 @@ public abstract class AbstractValidationInterceptor implements ValidationInterce
 
         return manager.getValidationProperties().getProperty(propertyName, DEFAULT);
     }
-
 }

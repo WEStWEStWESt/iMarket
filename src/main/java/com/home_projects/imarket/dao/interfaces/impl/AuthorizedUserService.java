@@ -22,11 +22,14 @@ public class AuthorizedUserService extends AbstractDAO<AuthorizedUser> {
 
     @Override
     public AuthorizedUser save(AuthorizedUser user) {
+        getInterceptorManager().onPrepare(user);
+        getInterceptorManager().onValidate(user);
         return repository.save(user);
     }
 
     @Override
     public boolean delete(AuthorizedUser user) {
+        getInterceptorManager().onRemove(user);
         repository.delete(user);
         return repository.getOne(user.getId()) == null;
     }

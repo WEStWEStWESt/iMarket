@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractDAO<T extends BaseEntity> {
 
     @PersistenceContext private EntityManager entityManager;
-    @Autowired private InterceptorManager interceptorManager;
+    @Autowired @Getter(AccessLevel.PROTECTED) private InterceptorManager interceptorManager;
 
     @Getter private Class<T> entityType;
     @Getter(AccessLevel.PROTECTED) private String tableName;
