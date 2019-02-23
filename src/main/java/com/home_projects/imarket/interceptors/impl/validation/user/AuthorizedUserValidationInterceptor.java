@@ -11,12 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthorizedUserValidationInterceptor extends AbstractValidationInterceptor {
     @Override
     public void execute(BaseEntity entity) {
-        String typeName = entity.getClass().getTypeName();
-        if (entity instanceof AuthorizedUser) {
-            log.debug(typeName + " validation initiated...");
-            validateField("username", "userName", entity);
-            validateField("password", "password", entity);
-            log.debug(typeName + " is valid.");
-        }
+
     }
 }
