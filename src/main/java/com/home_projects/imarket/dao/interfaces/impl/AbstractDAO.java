@@ -64,10 +64,10 @@ public abstract class AbstractDAO<T extends BaseEntity> {
     }
 
     public List<T> getAll(List<Long> ids) {
-        return entityManager.createNativeQuery("SELECT * FROM " + tableName + " WHERE id IN "
+        return entityManager.createNativeQuery("SELECT * FROM " + tableName + " WHERE id IN ("
                 + ids.stream()
                      .map(Objects::toString)
-                     .collect(Collectors.joining(", ")), entityType)
+                     .collect(Collectors.joining(", ")) + ")", entityType)
                      .getResultList();
     }
 
