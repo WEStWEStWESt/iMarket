@@ -60,7 +60,7 @@ public abstract class AbstractDAO<T extends BaseEntity> {
     }
 
     public T getOne(Long id){
-       return (T) entityManager.createQuery("FROM " + entityType + " WHERE id = " + id).getSingleResult();
+       return (T) entityManager.createQuery("FROM " + entityType.getSimpleName() + " WHERE id = " + id).getSingleResult();
     }
 
     public List<T> getAll(List<Long> ids) {

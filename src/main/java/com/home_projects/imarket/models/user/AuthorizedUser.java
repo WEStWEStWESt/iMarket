@@ -3,10 +3,7 @@ package com.home_projects.imarket.models.user;
 import com.home_projects.imarket.models.BaseEntity;
 import com.home_projects.imarket.models.profile.Profile;
 import com.home_projects.imarket.models.role.Role;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -16,18 +13,19 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "authorized_users")
-@EqualsAndHashCode(callSuper = true)
+@ToString(exclude = {"roles", "profile"})
+@EqualsAndHashCode(callSuper = true, exclude = {"roles", "profile"})
 public class AuthorizedUser extends BaseEntity {
 
-    @Column(name = "username", length = 50, nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = true)
     private String userName;
 
-    @Column(length = 12, nullable = false)
+    @Column(nullable = false)
     private String password;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private Set<Role> roles;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Profile profile;
 }

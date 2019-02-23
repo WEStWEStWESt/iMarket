@@ -9,6 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import static org.junit.Assert.*;
 
 @Transactional
@@ -17,9 +20,18 @@ import static org.junit.Assert.*;
 public class AbstractDAOTest {
 
     @Autowired private AuthorizedUserService authorizedUserService;
+    @PersistenceContext private EntityManager entityManager;
+    private static final Long FIRST_ID = 1L;
+    private static final String FIRST_TEST_NAME = "FirstTestName";
+    private static final String FIRST_TEST_PASSWORD = "PASSWORD1";
 
     @Before
     public void setUp() throws Exception {
+        entityManager.createNativeQuery("INSERT INTO authorized_users (id, username, password) " +
+                                           "VALUES (" + FIRST_ID + ", '"
+                                                      + FIRST_TEST_NAME +"', '"
+                                                      + FIRST_TEST_PASSWORD + "')")
+                     .executeUpdate();
     }
 
     @Test
@@ -34,7 +46,16 @@ public class AbstractDAOTest {
     }
 
     @Test
-    public void getOne() {
+    public void check_of_getting_entity_by_id() {
+        AuthorizedUser actualUser = authorizedUserService.getOne(FIRST_ID);
+        assertNotNull(actualUser);
+
+        AuthorizedUser expectedUser = new AuthorizedUser();
+        expectedUser.setId(FIRST_ID);
+        expectedUser.setUserName(FIRST_TEST_NAME);
+        expectedUser.setPassword(FIRST_TEST_PASSWORD);
+
+        assertEquals(expectedUser, actualUser);
     }
 
     @Test
