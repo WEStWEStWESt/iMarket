@@ -71,7 +71,7 @@ public class AbstractDAOTest {
     @Test
     public void check_of_getting_several_entities_by_ids() {
         final int EXPECTED_LIST_SIZE = 2;
-        List<AuthorizedUser> actualUsers = authorizedUserService.getAll(Arrays.asList(1L, 2L));
+        List<AuthorizedUser> actualUsers = authorizedUserService.getAll(Arrays.asList(FIRST_ID, SECOND_ID));
         assertNotNull(actualUsers);
         assertEquals(EXPECTED_LIST_SIZE, actualUsers.size());
         AuthorizedUser firstUser = new AuthorizedUser();

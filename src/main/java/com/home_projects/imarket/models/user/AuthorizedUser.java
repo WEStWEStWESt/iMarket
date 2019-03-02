@@ -13,8 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "authorized_users")
-@ToString(exclude = {"roles", "profile"})
-@EqualsAndHashCode(callSuper = true, exclude = {"roles", "profile"})
+@EqualsAndHashCode(callSuper = true)
 public class AuthorizedUser extends BaseEntity {
 
     @Column(name = "username", nullable = false, unique = true)
@@ -23,9 +22,13 @@ public class AuthorizedUser extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private Set<Role> roles;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Profile profile;
 }

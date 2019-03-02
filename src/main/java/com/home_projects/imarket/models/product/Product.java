@@ -2,10 +2,7 @@ package com.home_projects.imarket.models.product;
 
 import com.home_projects.imarket.models.BaseEntity;
 import com.home_projects.imarket.models.group.Group;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -36,6 +33,8 @@ public class Product extends BaseEntity {
     private Float discount;
 
     @ManyToOne
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @JoinColumn(name = "group_id")
     private Group group;
 }

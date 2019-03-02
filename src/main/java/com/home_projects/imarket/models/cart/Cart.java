@@ -5,10 +5,7 @@ import com.home_projects.imarket.models.cart.enums.DeliveryType;
 import com.home_projects.imarket.models.cart.enums.PaymentType;
 import com.home_projects.imarket.models.product.Product;
 import com.home_projects.imarket.models.profile.Profile;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -46,10 +43,14 @@ public class Cart extends BaseEntity {
     private Timestamp gotDate;
 
     @ManyToOne
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @JoinColumn(name = "profile_id")
     private Profile profile;
 
     @ManyToMany
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @JoinTable(name = "carts_products",
                joinColumns = @JoinColumn(name = "cart_id"),
                inverseJoinColumns = @JoinColumn(name = "product_id"))

@@ -2,10 +2,7 @@ package com.home_projects.imarket.models.category;
 
 import com.home_projects.imarket.models.BaseEntity;
 import com.home_projects.imarket.models.group.Group;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,6 +21,8 @@ public class Category extends BaseEntity {
     @Column(name = "categoryname", nullable = false, unique = true)
     private String categoryName;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "category")
     private Set<Group> groups;
 }

@@ -2,10 +2,7 @@ package com.home_projects.imarket.models.coupon;
 
 import com.home_projects.imarket.models.BaseEntity;
 import com.home_projects.imarket.models.profile.Profile;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -24,6 +21,8 @@ public class Coupon extends BaseEntity {
     private Long sum;
 
     @ManyToMany
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @JoinTable(name = "profiles_coupons",
                joinColumns = @JoinColumn(name = "profile_id"),
                inverseJoinColumns = @JoinColumn(name = "coupon_id"))

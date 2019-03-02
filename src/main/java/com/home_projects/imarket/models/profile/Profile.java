@@ -4,10 +4,7 @@ import com.home_projects.imarket.models.BaseEntity;
 import com.home_projects.imarket.models.cart.Cart;
 import com.home_projects.imarket.models.coupon.Coupon;
 import com.home_projects.imarket.models.user.AuthorizedUser;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnTransformer;
 
 import javax.persistence.*;
@@ -39,12 +36,18 @@ public class Profile extends BaseEntity {
     private String passport;
 
     @OneToOne
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @JoinColumn(name = "user_id")
     private AuthorizedUser user;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "profiles")
     private Set<Coupon> coupons;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "profile")
     private Set<Cart> carts;
 
