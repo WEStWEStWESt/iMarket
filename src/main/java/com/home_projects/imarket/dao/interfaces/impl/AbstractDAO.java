@@ -87,10 +87,10 @@ public abstract class AbstractDAO<T extends BaseEntity> {
     }
 
     public boolean deleteAll(List<Long> ids) {
-        return entityManager.createNativeQuery("DELETE FROM " + tableName + " WHERE id IN "
+        return entityManager.createNativeQuery("DELETE FROM " + tableName + " WHERE id IN ("
                 + ids.stream()
                 .map(Objects::toString)
-                .collect(Collectors.joining(", ")))
-                .executeUpdate() == ids.size() - 1;
+                .collect(Collectors.joining(", ")) + ")")
+                .executeUpdate() == ids.size();
     }
 }

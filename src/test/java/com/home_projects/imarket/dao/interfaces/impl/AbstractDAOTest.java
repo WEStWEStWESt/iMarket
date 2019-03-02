@@ -14,6 +14,8 @@ import javax.persistence.PersistenceContext;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -106,6 +108,16 @@ public class AbstractDAOTest {
     }
 
     @Test
-    public void deleteAll() {
+    public void check_of_deleting_several_entities_by_ids() {
+        List<Long> ids = Arrays.asList(FIRST_ID, SECOND_ID, THIRD_ID);
+        assertTrue(authorizedUserService.deleteAll(ids));
+
+        final int EXPECTED_EXECUTION_RESULT = 0;
+        assertEquals(EXPECTED_EXECUTION_RESULT, entityManager.createNativeQuery(
+                "DELETE FROM authorized_users WHERE id IN ("
+                + ids.stream()
+                        .map(Objects::toString)
+                        .collect(Collectors.joining(", ")) + ")")
+                .executeUpdate());
     }
 }
