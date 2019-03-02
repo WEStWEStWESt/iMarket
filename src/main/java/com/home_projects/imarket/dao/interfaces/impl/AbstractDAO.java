@@ -20,14 +20,21 @@ import java.util.stream.Collectors;
 @SuppressWarnings("All")
 public abstract class AbstractDAO<T extends BaseEntity> {
 
-    @PersistenceContext private EntityManager entityManager;
-    @Autowired @Getter(AccessLevel.PROTECTED) private InterceptorManager interceptorManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    @Getter private Class<T> entityType;
-    @Getter(AccessLevel.PROTECTED) private String tableName;
+    @Autowired
+    @Getter(AccessLevel.PROTECTED)
+    private InterceptorManager interceptorManager;
+
+    @Getter
+    private Class<T> entityType;
+
+    @Getter(AccessLevel.PROTECTED)
+    private String tableName;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         entityType = entityType();
         tableName = tableName();
     }
@@ -44,11 +51,11 @@ public abstract class AbstractDAO<T extends BaseEntity> {
         }
     }
 
-    private String tableName(){
-       return entityType.getAnnotation(Table.class).name();
+    private String tableName() {
+        return entityType.getAnnotation(Table.class).name();
     }
 
-    public T create(){
+    public T create() {
         Class<T> type = entityType();
         try {
             T t = type.newInstance();
@@ -59,16 +66,16 @@ public abstract class AbstractDAO<T extends BaseEntity> {
         }
     }
 
-    public T getOne(Long id){
-       return (T) entityManager.createQuery("FROM " + entityType.getSimpleName() + " WHERE id = " + id).getSingleResult();
+    public T getOne(Long id) {
+        return (T) entityManager.createQuery("FROM " + entityType.getSimpleName() + " WHERE id = " + id).getSingleResult();
     }
 
     public List<T> getAll(List<Long> ids) {
         return entityManager.createNativeQuery("SELECT * FROM " + tableName + " WHERE id IN ("
                 + ids.stream()
-                     .map(Objects::toString)
-                     .collect(Collectors.joining(", ")) + ")", entityType)
-                     .getResultList();
+                .map(Objects::toString)
+                .collect(Collectors.joining(", ")) + ")", entityType)
+                .getResultList();
     }
 
     public abstract T save(T t);
@@ -76,14 +83,14 @@ public abstract class AbstractDAO<T extends BaseEntity> {
     public abstract boolean delete(T t);
 
     public boolean delete(Long id) {
-        return entityManager.createQuery("DELETE FROM " + entityType + " WHERE id = " + id).executeUpdate() == 1;
+        return entityManager.createQuery("DELETE FROM " + entityType.getSimpleName() + " WHERE id = " + id).executeUpdate() == 1;
     }
 
     public boolean deleteAll(List<Long> ids) {
         return entityManager.createNativeQuery("DELETE FROM " + tableName + " WHERE id IN "
                 + ids.stream()
-                     .map(Objects::toString)
-                     .collect(Collectors.joining(", ")) )
-                     .executeUpdate() == ids.size() - 1;
+                .map(Objects::toString)
+                .collect(Collectors.joining(", ")))
+                .executeUpdate() == ids.size() - 1;
     }
 }

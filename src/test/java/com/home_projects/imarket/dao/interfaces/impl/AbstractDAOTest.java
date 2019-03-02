@@ -23,25 +23,34 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 public class AbstractDAOTest {
 
-    @Autowired private AuthorizedUserService authorizedUserService;
-    @PersistenceContext private EntityManager entityManager;
+    @Autowired
+    private AuthorizedUserService authorizedUserService;
+    @PersistenceContext
+    private EntityManager entityManager;
     private static final Long FIRST_ID = 1L;
     private static final Long SECOND_ID = 2L;
+    private static final Long THIRD_ID = 3L;
     private static final String FIRST_TEST_NAME = "FirstTestName";
     private static final String SECOND_TEST_NAME = "SecondTestName";
+    private static final String THIRD_TEST_NAME = "ThirdTestName";
     private static final String FIRST_TEST_PASSWORD = "PASSWORD1";
     private static final String SECOND_TEST_PASSWORD = "PASSWORD2";
+    private static final String THIRD_TEST_PASSWORD = "PASSWORD3";
 
     @Before
     public void setUp() throws Exception {
-        entityManager.createNativeQuery("INSERT INTO authorized_users (id, username, password) " +
-                                           "VALUES (" + FIRST_ID + ", '"
-                                                      + FIRST_TEST_NAME +"', '"
-                                                      + FIRST_TEST_PASSWORD + "'), ("
-                                                      + SECOND_ID + ", '"
-                                                      + SECOND_TEST_NAME + "', '"
-                                                      + SECOND_TEST_PASSWORD + "')")
-                     .executeUpdate();
+        entityManager.createNativeQuery(
+                "INSERT INTO authorized_users (id, username, password) " +
+                        "VALUES (" + FIRST_ID + ", '"
+                        + FIRST_TEST_NAME + "', '"
+                        + FIRST_TEST_PASSWORD + "'), ("
+                        + SECOND_ID + ", '"
+                        + SECOND_TEST_NAME + "', '"
+                        + SECOND_TEST_PASSWORD + "'), ("
+                        + THIRD_ID + ", '"
+                        + THIRD_TEST_NAME + "', '"
+                        + THIRD_TEST_PASSWORD + "')")
+                .executeUpdate();
     }
 
     @Test
@@ -88,7 +97,12 @@ public class AbstractDAOTest {
     }
 
     @Test
-    public void delete() {
+    public void check_of_deleting_entity_by_id() {
+        assertTrue(authorizedUserService.delete(FIRST_ID));
+
+        final int EXPECTED_EXECUTION_RESULT = 0;
+        assertEquals(EXPECTED_EXECUTION_RESULT, entityManager.createNativeQuery("DELETE FROM authorized_users WHERE id = " + FIRST_ID)
+                .executeUpdate());
     }
 
     @Test
