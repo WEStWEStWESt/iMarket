@@ -1,4 +1,4 @@
-package com.home_projects.imarket.dao.interfaces.impl;
+package com.home_projects.imarket.dao;
 
 import com.home_projects.imarket.interceptors.InterceptorManager;
 import com.home_projects.imarket.models.BaseEntity;

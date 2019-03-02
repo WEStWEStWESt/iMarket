@@ -1,5 +1,6 @@
-package com.home_projects.imarket.dao.interfaces.impl;
+package com.home_projects.imarket.dao.impl;
 
+import com.home_projects.imarket.dao.AbstractDAO;
 import com.home_projects.imarket.dao.interfaces.AuthorizedUserRepository;
 import com.home_projects.imarket.models.user.AuthorizedUser;
 import org.springframework.beans.factory.annotation.Autowired;

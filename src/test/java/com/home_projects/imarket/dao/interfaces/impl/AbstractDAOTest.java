@@ -1,5 +1,6 @@
 package com.home_projects.imarket.dao.interfaces.impl;
 
+import com.home_projects.imarket.dao.impl.AuthorizedUserService;
 import com.home_projects.imarket.models.user.AuthorizedUser;
 import org.junit.Before;
 import org.junit.Test;
