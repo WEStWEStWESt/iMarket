@@ -1,9 +1,9 @@
-package com.home_projects.imarket.interceptors.impl.validation;
+package com.home_projects.imarket.dao.interceptors.impl.validation;
 
 import com.home_projects.imarket.exceptions.ValidationException;
-import com.home_projects.imarket.interceptors.InterceptorManager;
-import com.home_projects.imarket.interceptors.annotations.EntityInterceptor;
-import com.home_projects.imarket.interceptors.interfaces.ValidationInterceptor;
+import com.home_projects.imarket.dao.interceptors.InterceptorManager;
+import com.home_projects.imarket.dao.interceptors.annotations.EntityInterceptor;
+import com.home_projects.imarket.dao.interceptors.interfaces.ValidationInterceptor;
 import com.home_projects.imarket.models.BaseEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

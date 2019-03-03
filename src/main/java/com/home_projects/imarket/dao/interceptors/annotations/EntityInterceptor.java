@@ -1,4 +1,4 @@
-package com.home_projects.imarket.interceptors.annotations;
+package com.home_projects.imarket.dao.interceptors.annotations;
 
 import com.home_projects.imarket.models.BaseEntity;
 import org.springframework.stereotype.Component;

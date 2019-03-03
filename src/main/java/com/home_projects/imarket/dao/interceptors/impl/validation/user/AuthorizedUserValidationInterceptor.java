@@ -1,7 +1,7 @@
-package com.home_projects.imarket.interceptors.impl.validation.user;
+package com.home_projects.imarket.dao.interceptors.impl.validation.user;
 
-import com.home_projects.imarket.interceptors.annotations.EntityInterceptor;
-import com.home_projects.imarket.interceptors.impl.validation.AbstractValidationInterceptor;
+import com.home_projects.imarket.dao.interceptors.annotations.EntityInterceptor;
+import com.home_projects.imarket.dao.interceptors.impl.validation.AbstractValidationInterceptor;
 import com.home_projects.imarket.models.BaseEntity;
 import com.home_projects.imarket.models.user.AuthorizedUser;
 

@@ -1,7 +1,7 @@
-package com.home_projects.imarket.interceptors;
+package com.home_projects.imarket.dao.interceptors;
 
-import com.home_projects.imarket.interceptors.annotations.EntityInterceptor;
-import com.home_projects.imarket.interceptors.interfaces.*;
+import com.home_projects.imarket.dao.interceptors.annotations.EntityInterceptor;
+import com.home_projects.imarket.dao.interceptors.interfaces.*;
 import com.home_projects.imarket.models.BaseEntity;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;

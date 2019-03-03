@@ -1,6 +1,6 @@
 package com.home_projects.imarket.dao;
 
-import com.home_projects.imarket.interceptors.InterceptorManager;
+import com.home_projects.imarket.dao.interceptors.InterceptorManager;
 import com.home_projects.imarket.models.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 import java.lang.reflect.ParameterizedType;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -39,7 +40,7 @@ public abstract class AbstractDAO<T extends BaseEntity> {
         tableName = tableName();
     }
 
-    private Class<T> entityType() {
+    public Class<T> entityType() {
         String typeName = ((ParameterizedType) getClass()
                 .getGenericSuperclass())
                 .getActualTypeArguments()[0]
@@ -92,5 +93,13 @@ public abstract class AbstractDAO<T extends BaseEntity> {
                 .map(Objects::toString)
                 .collect(Collectors.joining(", ")) + ")")
                 .executeUpdate() == ids.size();
+    }
+
+    public boolean deleteAll() {
+        entityManager.createNativeQuery("DELETE FROM " + tableName)
+                .executeUpdate();
+        return ((BigInteger) entityManager.createNativeQuery("SELECT COUNT(*) FROM " + tableName)
+                .getSingleResult())
+                .longValue() == 0;
     }
 }
