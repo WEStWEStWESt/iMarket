@@ -1,6 +1,6 @@
-package com.home_projects.imarket.converters;
+package com.home_projects.imarket.facades.converters;
 
-import com.home_projects.imarket.converters.interfaces.Converter;
+import com.home_projects.imarket.facades.converters.interfaces.Converter;
 
 import java.lang.reflect.ParameterizedType;
 
