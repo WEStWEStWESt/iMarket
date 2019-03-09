@@ -1,6 +1,5 @@
 package com.home_projects.imarket.dao.interceptors.impl.validation;
 
-import com.home_projects.imarket.exceptions.ValidationException;
 import com.home_projects.imarket.dao.interceptors.InterceptorManager;
 import com.home_projects.imarket.dao.interceptors.annotations.EntityInterceptor;
 import com.home_projects.imarket.dao.interceptors.interfaces.ValidationInterceptor;
@@ -28,7 +27,7 @@ public abstract class AbstractValidationInterceptor implements ValidationInterce
             if (type != getClass().getAnnotation(EntityInterceptor.class).interceptorEntity()) {
                 error = "unexpected entity type - [" + typeName + "]";
                 log.error(error);
-                throw new ValidationException(error);
+                throw new RuntimeException(error);
             }
 
             for (Pair<String, String> pair : pairs) {
@@ -39,7 +38,7 @@ public abstract class AbstractValidationInterceptor implements ValidationInterce
         } catch (Exception e) {
             error = "Validation error: " + e.getMessage();
             log.error(error);
-            throw new ValidationException(error);
+            throw new RuntimeException(error);
         }
     }
 
