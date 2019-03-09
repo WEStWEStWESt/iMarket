@@ -1,6 +1,8 @@
 package com.home_projects.imarket.services;
 
 import com.home_projects.imarket.facades.converters.interfaces.Converter;
+import com.home_projects.imarket.facades.dto.BaseDTO;
+import com.home_projects.imarket.models.BaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.util.Pair;
@@ -8,10 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @SuppressWarnings("ALL")
-public class ConversionService {
+public class ConverterService {
 
     @Autowired
     private ApplicationContext context;
@@ -29,6 +33,33 @@ public class ConversionService {
                 })
                 .findFirst()
                 .orElse(null);
+    }
+
+    public <D extends BaseDTO, E extends BaseEntity> D getOne(Long id, Class<D> dto, Class<E> entity) {
+        Converter<E, D> converter = getConverterFor(entity, dto);
+        return converter.convert(modelService.getOne(entity, id));
+    }
+
+    public <D extends BaseDTO, E extends BaseEntity> List<D> getAll(List<Long> ids, Class<D> dto, Class<E> entity) {
+        Converter<E, D> converter = getConverterFor(entity, dto);
+        return modelService.getAll(entity, ids)
+                .stream()
+                .map(converter::convert)
+                .collect(Collectors.toList());
+    }
+
+    public <D extends BaseDTO, E extends BaseEntity> D save(D d, Class<D> dto, Class<E> entity){
+        Converter<D, E> converter = getConverterFor(dto, entity);
+        Converter<E, D> reversedConverter = getConverterFor(entity, dto);
+        Long id = d.getId();
+        E e = null;
+        if (id == null) {
+            e = modelService.create(entity);
+        } else {
+            e = modelService.getOne(entity, id);
+        }
+
+        return reversedConverter.convert(modelService.save(entity, converter.convert(d, e)));
     }
 
     private <S, T> boolean isMatch(Type[] types, Class<S> source, Class<T> target) {
