@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,18 +49,36 @@ public class ConverterService {
                 .collect(Collectors.toList());
     }
 
-    public <D extends BaseDTO, E extends BaseEntity> D save(D d, Class<D> dto, Class<E> entity){
+    public <D extends BaseDTO, E extends BaseEntity> D save(D d, Class<D> dto, Class<E> entity) {
+        return saveAll(Collections.singletonList(d), dto, entity).get(0);
+    }
+
+    public <D extends BaseDTO, E extends BaseEntity> List<D> saveAll(List<D> ds, Class<D> dto, Class<E> entity) {
         Converter<D, E> converter = getConverterFor(dto, entity);
         Converter<E, D> reversedConverter = getConverterFor(entity, dto);
-        Long id = d.getId();
+
+        return ds.stream()
+                .map(d -> {
+                    E actualEntity = getActualEntity(d.getId(), entity);
+                    E convertedEntity = converter.convert(d, actualEntity);
+                    E savedEntity = modelService.save(entity, convertedEntity);
+                    return reversedConverter.convert(savedEntity);
+                }).collect(Collectors.toList());
+    }
+
+    public <D extends BaseDTO, E extends BaseEntity> boolean delete(D d, Class<D> dto, Class<E> entity) {
+        Converter<D, E> converter = getConverterFor(dto, entity);
+        return modelService.delete(entity, converter.convert(d));
+    }
+
+    private <D extends BaseDTO, E extends BaseEntity> E getActualEntity(Long id, Class<E> entity) {
         E e = null;
         if (id == null) {
             e = modelService.create(entity);
         } else {
             e = modelService.getOne(entity, id);
         }
-
-        return reversedConverter.convert(modelService.save(entity, converter.convert(d, e)));
+        return e;
     }
 
     private <S, T> boolean isMatch(Type[] types, Class<S> source, Class<T> target) {
