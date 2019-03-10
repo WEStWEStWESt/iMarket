@@ -32,6 +32,6 @@ public class AuthorizedUserService extends AbstractDAO<AuthorizedUser> {
     public boolean delete(AuthorizedUser user) {
         getInterceptorManager().onRemove(user);
         repository.delete(user);
-        return repository.getOne(user.getId()) == null;
+        return !repository.existsById(user.getId());
     }
 }

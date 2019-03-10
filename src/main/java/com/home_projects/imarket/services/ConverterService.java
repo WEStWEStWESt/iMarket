@@ -68,7 +68,9 @@ public class ConverterService {
 
     public <D extends BaseDTO, E extends BaseEntity> boolean delete(D d, Class<D> dto, Class<E> entity) {
         Converter<D, E> converter = getConverterFor(dto, entity);
-        return modelService.delete(entity, converter.convert(d));
+        E actualEntity = modelService.getOne(entity, d.getId());
+        E convertedEntity = converter.convert(d, actualEntity);
+        return modelService.delete(entity, convertedEntity);
     }
 
     private <D extends BaseDTO, E extends BaseEntity> E getActualEntity(Long id, Class<E> entity) {
