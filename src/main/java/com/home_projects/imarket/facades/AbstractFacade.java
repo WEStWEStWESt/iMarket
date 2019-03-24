@@ -13,6 +13,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public abstract class AbstractFacade<E extends BaseEntity, D extends BaseDTO> implements Facade<D> {
@@ -46,32 +48,51 @@ public abstract class AbstractFacade<E extends BaseEntity, D extends BaseDTO> im
 
     @Override
     public List<D> getAll(List<Long> ids) {
-        return null;
+        Converter<E, D> converter = converterService.getConverterFor(entityType, dtoType);
+        return modelService.getAll(entityType, ids)
+                .stream()
+                .map(converter::convert)
+                .collect(Collectors.toList());
     }
 
     @Override
     public D save(D dto) {
-        return null;
+        E actualEntity = getActualEntity(dto);
+        E saved = modelService.save(entityType, actualEntity);
+        return converterService.getConverterFor(entityType, dtoType).convert(saved);
     }
 
     @Override
     public boolean delete(D dto) {
-        return false;
+        return delete(dto.getId());
     }
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        return modelService.delete(entityType, id);
     }
 
     @Override
     public boolean deleteAll(List<Long> ids) {
-        return false;
+        return modelService.deleteAll(entityType, ids);
     }
 
     @Override
     public boolean deleteAll() {
-        return false;
+        return modelService.deleteAll(entityType);
+    }
+
+    protected <E extends BaseEntity, D extends BaseDTO> Optional<E> getActualForeignKey(Class<E> type, D dto) {
+        return Optional.of(modelService.getOne(type, dto.getId()));
+    }
+
+    protected <E extends BaseEntity, D extends BaseDTO> Optional<Set<E>> getActualForeignKeys(Class<E> type, Set<D> dtos) {
+        List<Long> ids = dtos.stream()
+                .map(BaseDTO::getId)
+                .collect(Collectors.toList());
+        return Optional.of(modelService.getAll(type, ids)
+                .stream()
+                .collect(Collectors.toSet()));
     }
 
     protected E convertToActualEntity(D dto) {
