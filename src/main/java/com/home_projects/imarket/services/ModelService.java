@@ -22,7 +22,7 @@ public class ModelService {
                 .stream()
                 .filter(abstractDAO -> abstractDAO.getEntityType() == type)
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new RuntimeException("Required <" + type.getSimpleName() + "> dao not found"));
     }
 
     public <E extends BaseEntity> E create(Class<E> type) {

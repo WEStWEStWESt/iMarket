@@ -1,7 +1,7 @@
 package com.home_projects.imarket.dao;
 
-import com.home_projects.imarket.dao.impl.AuthorizedUserService;
 import com.home_projects.imarket.models.user.AuthorizedUser;
+import com.home_projects.imarket.services.ModelService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -27,7 +26,7 @@ import static org.junit.Assert.*;
 public class AbstractDAOTest {
 
     @Autowired
-    private AuthorizedUserService authorizedUserService;
+    private ModelService modelService;
     @PersistenceContext
     private EntityManager entityManager;
     private static final Long FIRST_ID = 1L;
@@ -58,7 +57,7 @@ public class AbstractDAOTest {
 
     @Test
     public void check_of_entity_creation() {
-        AuthorizedUser actualUser = authorizedUserService.create();
+        AuthorizedUser actualUser = modelService.create(AuthorizedUser.class);
         assertNotNull(actualUser);
 
         assertTrue(actualUser instanceof AuthorizedUser);
@@ -69,7 +68,7 @@ public class AbstractDAOTest {
 
     @Test
     public void check_of_getting_entity_by_id() {
-        AuthorizedUser actualUser = authorizedUserService.getOne(FIRST_ID);
+        AuthorizedUser actualUser = modelService.getOne(AuthorizedUser.class, FIRST_ID);
         assertNotNull(actualUser);
 
         AuthorizedUser expectedUser = new AuthorizedUser();
@@ -83,7 +82,7 @@ public class AbstractDAOTest {
     @Test
     public void check_of_getting_several_entities_by_ids() {
         final int EXPECTED_LIST_SIZE = 2;
-        List<AuthorizedUser> actualUsers = authorizedUserService.getAll(Arrays.asList(FIRST_ID, SECOND_ID));
+        List<AuthorizedUser> actualUsers = modelService.getAll(AuthorizedUser.class, Arrays.asList(FIRST_ID, SECOND_ID));
         assertNotNull(actualUsers);
         assertEquals(EXPECTED_LIST_SIZE, actualUsers.size());
         AuthorizedUser firstUser = new AuthorizedUser();
@@ -101,7 +100,7 @@ public class AbstractDAOTest {
 
     @Test
     public void check_of_deleting_entity_by_id() {
-        assertTrue(authorizedUserService.delete(FIRST_ID));
+        assertTrue(modelService.delete(AuthorizedUser.class, FIRST_ID));
 
         final int EXPECTED_EXECUTION_RESULT = 0;
         assertEquals(EXPECTED_EXECUTION_RESULT, entityManager.createNativeQuery("DELETE FROM authorized_users WHERE id = " + FIRST_ID)
@@ -111,12 +110,12 @@ public class AbstractDAOTest {
     @Test
     public void check_of_deleting_several_entities_by_ids() {
         List<Long> ids = Arrays.asList(FIRST_ID, SECOND_ID, THIRD_ID);
-        assertTrue(authorizedUserService.deleteAll(ids));
+        assertTrue(modelService.deleteAll(AuthorizedUser.class, ids));
 
         final int EXPECTED_EXECUTION_RESULT = 0;
         assertEquals(EXPECTED_EXECUTION_RESULT, entityManager.createNativeQuery(
                 "DELETE FROM authorized_users WHERE id IN ("
-                + ids.stream()
+                        + ids.stream()
                         .map(Objects::toString)
                         .collect(Collectors.joining(", ")) + ")")
                 .executeUpdate());
