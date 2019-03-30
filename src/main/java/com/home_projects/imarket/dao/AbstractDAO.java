@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractDAO<T extends BaseEntity> {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    protected EntityManager entityManager;
 
     @Autowired
     @Getter(AccessLevel.PROTECTED)
@@ -96,14 +96,14 @@ public abstract class AbstractDAO<T extends BaseEntity> {
     }
 
     public boolean delete(Long id) {
-        return entityManager.createQuery("DELETE FROM " + getSimpleEntityName() + " t WHERE t.id = " + id, entityType).executeUpdate() == 1;
+        return entityManager.createQuery("DELETE FROM " + getSimpleEntityName() + " t WHERE t.id = " + id).executeUpdate() == 1;
     }
 
     public boolean deleteAll(List<Long> ids) {
         return entityManager.createQuery("DELETE FROM " + getSimpleEntityName() + " t WHERE t.id IN ("
                 + ids.stream()
                 .map(Objects::toString)
-                .collect(Collectors.joining(", ")) + ")", entityType)
+                .collect(Collectors.joining(", ")) + ")")
                 .executeUpdate() == ids.size();
     }
 
