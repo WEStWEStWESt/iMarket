@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 import java.lang.reflect.ParameterizedType;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -52,6 +51,10 @@ public abstract class AbstractDAO<T extends BaseEntity> {
         }
     }
 
+    public String getSimpleEntityName() {
+        return entityType.getSimpleName();
+    }
+
     private String tableName() {
         return entityType.getAnnotation(Table.class).name();
     }
@@ -68,38 +71,46 @@ public abstract class AbstractDAO<T extends BaseEntity> {
     }
 
     public T getOne(Long id) {
-        return (T) entityManager.createQuery("FROM " + entityType.getSimpleName() + " WHERE id = " + id).getSingleResult();
+        return (T) entityManager.createQuery("FROM " + getSimpleEntityName() + " t WHERE t.id = " + id, entityType).getSingleResult();
     }
 
     public List<T> getAll(List<Long> ids) {
-        return entityManager.createNativeQuery("SELECT * FROM " + tableName + " WHERE id IN ("
+        return entityManager.createQuery("FROM " + getSimpleEntityName() + " t WHERE t.id IN ("
                 + ids.stream()
                 .map(Objects::toString)
                 .collect(Collectors.joining(", ")) + ")", entityType)
                 .getResultList();
     }
 
-    public abstract T save(T t);
+    public T save(T t) {
+        interceptorManager.onPrepare(t);
+        interceptorManager.onValidate(t);
+        entityManager.persist(t);
+        return t;
+    }
 
-    public abstract boolean delete(T t);
+    public boolean delete(T t) {
+        interceptorManager.onRemove(t);
+        entityManager.remove(t);
+        return getOne(t.getId()) == null;
+    }
 
     public boolean delete(Long id) {
-        return entityManager.createQuery("DELETE FROM " + entityType.getSimpleName() + " WHERE id = " + id).executeUpdate() == 1;
+        return entityManager.createQuery("DELETE FROM " + getSimpleEntityName() + " t WHERE t.id = " + id, entityType).executeUpdate() == 1;
     }
 
     public boolean deleteAll(List<Long> ids) {
-        return entityManager.createNativeQuery("DELETE FROM " + tableName + " WHERE id IN ("
+        return entityManager.createQuery("DELETE FROM " + getSimpleEntityName() + " t WHERE t.id IN ("
                 + ids.stream()
                 .map(Objects::toString)
-                .collect(Collectors.joining(", ")) + ")")
+                .collect(Collectors.joining(", ")) + ")", entityType)
                 .executeUpdate() == ids.size();
     }
 
     public boolean deleteAll() {
-        entityManager.createNativeQuery("DELETE FROM " + tableName)
+        entityManager.createQuery("DELETE FROM " + getSimpleEntityName())
                 .executeUpdate();
-        return ((BigInteger) entityManager.createNativeQuery("SELECT COUNT(*) FROM " + tableName)
-                .getSingleResult())
-                .longValue() == 0;
+        return entityManager.createQuery("SELECT COUNT(t) FROM " + getSimpleEntityName() + " t", Long.class)
+                .getSingleResult() == 0;
     }
 }
