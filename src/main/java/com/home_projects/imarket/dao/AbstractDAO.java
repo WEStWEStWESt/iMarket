@@ -1,7 +1,7 @@
 package com.home_projects.imarket.dao;
 
-import com.home_projects.imarket.dao.interceptors.InterceptorManager;
 import com.home_projects.imarket.models.BaseEntity;
+import com.home_projects.imarket.services.InterceptorService;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public abstract class AbstractDAO<T extends BaseEntity> {
 
     @Autowired
     @Getter(AccessLevel.PROTECTED)
-    private InterceptorManager interceptorManager;
+    private InterceptorService interceptorService;
 
     @Getter
     private Class<T> entityType;
@@ -63,7 +63,7 @@ public abstract class AbstractDAO<T extends BaseEntity> {
         Class<T> type = entityType();
         try {
             T t = type.newInstance();
-            interceptorManager.onInit(t);
+            interceptorService.onInit(t);
             return t;
         } catch (IllegalAccessException | InstantiationException e) {
             throw new RuntimeException("Cannot create instance of: " + type);
@@ -83,14 +83,14 @@ public abstract class AbstractDAO<T extends BaseEntity> {
     }
 
     public T save(T t) {
-        interceptorManager.onPrepare(t);
-        interceptorManager.onValidate(t);
+        interceptorService.onPrepare(t);
+        interceptorService.onValidate(t);
         entityManager.persist(t);
         return t;
     }
 
     public boolean delete(T t) {
-        interceptorManager.onRemove(t);
+        interceptorService.onRemove(t);
         entityManager.remove(t);
         return getOne(t.getId()) == null;
     }

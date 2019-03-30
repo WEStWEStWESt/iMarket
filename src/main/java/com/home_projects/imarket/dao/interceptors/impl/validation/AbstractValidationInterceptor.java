@@ -1,6 +1,6 @@
 package com.home_projects.imarket.dao.interceptors.impl.validation;
 
-import com.home_projects.imarket.dao.interceptors.InterceptorManager;
+import com.home_projects.imarket.services.InterceptorService;
 import com.home_projects.imarket.dao.interceptors.annotations.EntityInterceptor;
 import com.home_projects.imarket.dao.interceptors.interfaces.ValidationInterceptor;
 import com.home_projects.imarket.models.BaseEntity;
@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public abstract class AbstractValidationInterceptor implements ValidationInterceptor {
     @Autowired
-    private InterceptorManager manager;
+    private InterceptorService manager;
 
     protected <T extends BaseEntity> void validateFields(T entity, Pair<String, String>... pairs) {
         Class<? extends BaseEntity> type = entity.getClass();

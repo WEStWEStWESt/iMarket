@@ -1,4 +1,4 @@
-package com.home_projects.imarket.dao.interceptors;
+package com.home_projects.imarket.services;
 
 import com.home_projects.imarket.dao.interceptors.annotations.EntityInterceptor;
 import com.home_projects.imarket.dao.interceptors.interfaces.*;
@@ -9,13 +9,18 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
 @Component
-public class InterceptorManager {
-    @Getter private Properties validationProperties;
-    @Autowired private ApplicationContext context;
+public class InterceptorService {
+    @Getter
+    private Properties validationProperties;
+    @Autowired
+    private ApplicationContext context;
+    private Map<String, Interceptor> interceptors;
 
     public void onInit(BaseEntity entity) {
         execute(entity, InitializationInterceptor.class);
@@ -33,20 +38,24 @@ public class InterceptorManager {
         execute(entity, RemovingInterceptor.class);
     }
 
-    private <I extends Interceptor> void execute(BaseEntity entity, Class<I> type) {
-        context.getBeansOfType(type)
-                .values()
+    private <I extends Interceptor> void execute(BaseEntity entity, Class<I> lifecycle) {
+        interceptors.values()
                 .stream()
-                .filter(interceptor -> entity.getClass() == interceptor.getClass()
-                        .getAnnotation(EntityInterceptor.class)
-                        .interceptorEntity())
+                .filter(interceptor -> {
+                    Class<? extends Interceptor> type = interceptor.getClass();
+                    if (Arrays.asList(type.getSuperclass().getInterfaces()).contains(lifecycle)) {
+                        return entity.getClass() == type.getAnnotation(EntityInterceptor.class)
+                                .interceptorEntity();
+                    } else return false;
+                })
                 .forEach(interceptor -> interceptor.execute(entity));
     }
 
     @PostConstruct
-    private void resolveProperties() {
+    private void init() {
         String propertyFile = "properties/validation.properties";
         validationProperties = new Properties();
+        interceptors = context.getBeansOfType(Interceptor.class);
         try {
             validationProperties.load((Objects.requireNonNull(context.getClassLoader())).getResourceAsStream(propertyFile));
         } catch (Exception e) {

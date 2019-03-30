@@ -3,22 +3,30 @@ package com.home_projects.imarket.services;
 import com.home_projects.imarket.dao.AbstractDAO;
 import com.home_projects.imarket.models.BaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 @SuppressWarnings("unchecked")
-public class ModelService {
+public class ModelService implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
     private ApplicationContext context;
+    private static Map<String, AbstractDAO> daos;
+
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+        daos = applicationReadyEvent.getApplicationContext().getBeansOfType(AbstractDAO.class);
+    }
 
     public <E extends BaseEntity> AbstractDAO<E> getDAOFor(Class<E> type) {
-        return context.getBeansOfType(AbstractDAO.class)
-                .values()
+        return daos.values()
                 .stream()
                 .filter(abstractDAO -> abstractDAO.getEntityType() == type)
                 .findFirst()

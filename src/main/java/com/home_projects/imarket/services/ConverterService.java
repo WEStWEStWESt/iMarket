@@ -1,24 +1,26 @@
 package com.home_projects.imarket.services;
 
 import com.home_projects.imarket.facades.converters.interfaces.Converter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.data.util.Pair;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Map;
 
 @Service
 @SuppressWarnings("ALL")
-public class ConverterService {
+public class ConverterService implements ApplicationListener<ApplicationReadyEvent> {
+    private static Map<String, Converter> converters;
 
-    @Autowired
-    private ApplicationContext context;
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+        converters = applicationReadyEvent.getApplicationContext().getBeansOfType(Converter.class);
+    }
 
     public <S, T> Converter<S, T> getConverterFor(Class<S> source, Class<T> target) {
-        return context.getBeansOfType(Converter.class)
-                .values()
+        return converters.values()
                 .stream()
                 .filter(converter -> {
                     Type[] actualTypeArguments = ((ParameterizedType) converter.getClass().getGenericSuperclass()).getActualTypeArguments();
