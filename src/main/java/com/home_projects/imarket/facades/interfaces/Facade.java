@@ -11,6 +11,8 @@ public interface Facade<D extends BaseDTO> {
 
     D save(D dto);
 
+    List<D> saveAll(List<D> dtos);
+
     boolean delete(D dto);
 
     boolean delete(Long id);

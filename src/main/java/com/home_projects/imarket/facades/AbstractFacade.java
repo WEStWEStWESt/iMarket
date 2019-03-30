@@ -34,7 +34,7 @@ public abstract class AbstractFacade<E extends BaseEntity, D extends BaseDTO> im
             entityType = (Class<E>) Class.forName(types[0].getTypeName());
             dtoType = (Class<D>) Class.forName(types[1].getTypeName());
         } catch (ClassNotFoundException e) {
-           throw new RuntimeException("Unexpected generic type: " + e.getMessage());
+            throw new RuntimeException("Unexpected generic type: " + e.getMessage());
         }
     }
 
@@ -59,7 +59,18 @@ public abstract class AbstractFacade<E extends BaseEntity, D extends BaseDTO> im
     public D save(D dto) {
         E actualEntity = getActualEntity(dto);
         E saved = modelService.save(entityType, actualEntity);
-        return converterService.getConverterFor(entityType, dtoType).convert(saved);
+        return convertToActualDto(saved);
+    }
+
+    @Override
+    public List<D> saveAll(List<D> dtos) {
+        List<E> actualEntities = dtos.stream()
+                .map(this::getActualEntity)
+                .collect(Collectors.toList());
+        return modelService.saveAll(entityType, actualEntities)
+                .stream()
+                .map(this::convertToActualDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -105,6 +116,10 @@ public abstract class AbstractFacade<E extends BaseEntity, D extends BaseDTO> im
         }
 
         return converterService.getConverterFor(dtoType, entityType).convert(dto, e);
+    }
+
+    protected D convertToActualDto(E e) {
+        return converterService.getConverterFor(entityType, dtoType).convert(e);
     }
 
     protected E getActualEntity(D dto) {
