@@ -11,8 +11,8 @@ public class AuthorizedUserConverter extends AbstractConverter<AuthorizedUserDTO
     public AuthorizedUser convert(AuthorizedUserDTO source, AuthorizedUser target) {
         target.setId(source.getId());
 
-        target.setUserName(source.getUserName());
-        target.setPassword(source.getPassword());
+        setIfPresent(source.getUserName(), target::setUserName);
+        setIfPresent(source.getPassword(), target::setPassword);
 
         return target;
     }
