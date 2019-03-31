@@ -26,7 +26,6 @@ import javax.sql.DataSource;
 @EnableAuthorizationServer
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-
     @Autowired
     private DataSource dataSource;
 
