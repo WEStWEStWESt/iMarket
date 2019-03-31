@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@SuppressWarnings("unchecked")
+@SuppressWarnings("ALL")
 public class ModelService implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
