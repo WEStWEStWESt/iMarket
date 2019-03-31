@@ -2,11 +2,11 @@ package com.home_projects.imarket.dao;
 
 import com.home_projects.imarket.models.user.AuthorizedUser;
 import com.home_projects.imarket.services.ModelService;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
 @SpringBootTest
 @SuppressWarnings("ALL")
 @RunWith(SpringRunner.class)
+@Sql({"/sql/auth_user_insert.sql"})
 public class AbstractDAOTest {
 
     @Autowired
@@ -32,28 +33,6 @@ public class AbstractDAOTest {
     private static final Long FIRST_ID = 1L;
     private static final Long SECOND_ID = 2L;
     private static final Long THIRD_ID = 3L;
-    private static final String FIRST_TEST_NAME = "FirstTestName";
-    private static final String SECOND_TEST_NAME = "SecondTestName";
-    private static final String THIRD_TEST_NAME = "ThirdTestName";
-    private static final String FIRST_TEST_PASSWORD = "PASSWORD1";
-    private static final String SECOND_TEST_PASSWORD = "PASSWORD2";
-    private static final String THIRD_TEST_PASSWORD = "PASSWORD3";
-
-    @Before
-    public void setUp() throws Exception {
-        entityManager.createNativeQuery(
-                "INSERT INTO authorized_users (id, username, password) " +
-                        "VALUES (" + FIRST_ID + ", '"
-                        + FIRST_TEST_NAME + "', '"
-                        + FIRST_TEST_PASSWORD + "'), ("
-                        + SECOND_ID + ", '"
-                        + SECOND_TEST_NAME + "', '"
-                        + SECOND_TEST_PASSWORD + "'), ("
-                        + THIRD_ID + ", '"
-                        + THIRD_TEST_NAME + "', '"
-                        + THIRD_TEST_PASSWORD + "')")
-                .executeUpdate();
-    }
 
     @Test
     public void check_of_entity_creation() {
@@ -71,10 +50,8 @@ public class AbstractDAOTest {
         AuthorizedUser actualUser = modelService.getOne(AuthorizedUser.class, FIRST_ID);
         assertNotNull(actualUser);
 
-        AuthorizedUser expectedUser = new AuthorizedUser();
-        expectedUser.setId(FIRST_ID);
-        expectedUser.setUserName(FIRST_TEST_NAME);
-        expectedUser.setPassword(FIRST_TEST_PASSWORD);
+        AuthorizedUser expectedUser = entityManager.createQuery("FROM AuthorizedUser a WHERE a.id = " + FIRST_ID, AuthorizedUser.class)
+                .getSingleResult();
 
         assertEquals(expectedUser, actualUser);
     }
@@ -82,19 +59,15 @@ public class AbstractDAOTest {
     @Test
     public void check_of_getting_several_entities_by_ids() {
         final int EXPECTED_LIST_SIZE = 2;
-        List<AuthorizedUser> actualUsers = modelService.getAll(AuthorizedUser.class, Arrays.asList(FIRST_ID, SECOND_ID));
+        List<Long> ids = Arrays.asList(FIRST_ID, SECOND_ID);
+        List<AuthorizedUser> actualUsers = modelService.getAll(AuthorizedUser.class, ids);
         assertNotNull(actualUsers);
         assertEquals(EXPECTED_LIST_SIZE, actualUsers.size());
-        AuthorizedUser firstUser = new AuthorizedUser();
-        firstUser.setId(FIRST_ID);
-        firstUser.setUserName(FIRST_TEST_NAME);
-        firstUser.setPassword(FIRST_TEST_PASSWORD);
-
-        AuthorizedUser secondUser = new AuthorizedUser();
-        secondUser.setId(SECOND_ID);
-        secondUser.setUserName(SECOND_TEST_NAME);
-        secondUser.setPassword(SECOND_TEST_PASSWORD);
-        List<AuthorizedUser> expectedUsers = Arrays.asList(firstUser, secondUser);
+        List<AuthorizedUser> expectedUsers = entityManager.createQuery("FROM AuthorizedUser a WHERE a.id IN (" +
+                ids.stream()
+                        .map(Objects::toString)
+                        .collect(Collectors.joining(", ")) + ")")
+                .getResultList();
         assertEquals(expectedUsers, actualUsers);
     }
 
@@ -103,7 +76,7 @@ public class AbstractDAOTest {
         assertTrue(modelService.delete(AuthorizedUser.class, FIRST_ID));
 
         final int EXPECTED_EXECUTION_RESULT = 0;
-        assertEquals(EXPECTED_EXECUTION_RESULT, entityManager.createNativeQuery("DELETE FROM authorized_users WHERE id = " + FIRST_ID)
+        assertEquals(EXPECTED_EXECUTION_RESULT, entityManager.createQuery("DELETE FROM AuthorizedUser a WHERE a.id = " + FIRST_ID)
                 .executeUpdate());
     }
 
@@ -113,8 +86,8 @@ public class AbstractDAOTest {
         assertTrue(modelService.deleteAll(AuthorizedUser.class, ids));
 
         final int EXPECTED_EXECUTION_RESULT = 0;
-        assertEquals(EXPECTED_EXECUTION_RESULT, entityManager.createNativeQuery(
-                "DELETE FROM authorized_users WHERE id IN ("
+        assertEquals(EXPECTED_EXECUTION_RESULT, entityManager.createQuery(
+                "DELETE FROM AuthorizedUser a WHERE a.id IN ("
                         + ids.stream()
                         .map(Objects::toString)
                         .collect(Collectors.joining(", ")) + ")")
