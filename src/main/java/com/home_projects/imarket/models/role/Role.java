@@ -25,7 +25,7 @@ public class Role extends BaseEntity {
     @ManyToMany
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"),
-                                     inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "role_id"),
+                                     inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<AuthorizedUser> users;
 }
