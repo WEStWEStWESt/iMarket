@@ -13,7 +13,7 @@ INSERT INTO oauth_client_details (
 VALUES (
     'spring-security-oauth2-client',
     'imarket-resource-server-api',
-    '$2y$12$0eJHNBeSErmzF9suTWhloe0QyQF3/vI8nrU9tyNkSis8g5AZG4/mG',
+    '$2a$10$sy3n0FTB/AdA.gNirBxsMuUzLE00FarPTbFPKlYeqRotLMY19k/Fu',
     'read,write',
     'password,refresh_token',
     NULL,
@@ -27,7 +27,7 @@ VALUES (
 INSERT INTO authorized_users (id, username, password) VALUES (
     1,
     'admin',
-    '$2y$12$eV8kcvHw4dyHAwXCizbqHu2Ez7GOFCuX2RGux7oBREalA/AQGc/c2');
+    '$2a$10$sy3n0FTB/AdA.gNirBxsMuUzLE00FarPTbFPKlYeqRotLMY19k/Fu');
 
 INSERT INTO roles (id, rolename) VALUES
     (1, 'CUSTOMER'),

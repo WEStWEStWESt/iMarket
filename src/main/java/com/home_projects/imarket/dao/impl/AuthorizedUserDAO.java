@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class AuthorizedUserDAO extends AbstractDAO<AuthorizedUser> {
+
     public User getByName(String username) {
         AuthorizedUser user = entityManager.createQuery("FROM " + getSimpleEntityName() + " t WHERE t.userName = :par_name", AuthorizedUser.class)
                 .setParameter("par_name", username)
@@ -22,4 +23,5 @@ public class AuthorizedUserDAO extends AbstractDAO<AuthorizedUser> {
                                         .name()))
                         .collect(Collectors.toSet()));
     }
+
 }
