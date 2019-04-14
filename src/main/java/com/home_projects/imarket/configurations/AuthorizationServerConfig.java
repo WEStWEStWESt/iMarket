@@ -72,7 +72,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         clients
                 .inMemory()
                 .withClient(clientId)
-                .secret(clientSecret)
+                .secret(passwordEncoder.encode(clientSecret))
                 .scopes(read, write)
                 .accessTokenValiditySeconds(lifetimeAccessToken)
                 .refreshTokenValiditySeconds(lifetimeRefreshToken)
