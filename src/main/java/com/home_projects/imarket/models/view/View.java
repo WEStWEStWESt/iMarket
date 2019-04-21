@@ -4,10 +4,7 @@ import com.home_projects.imarket.models.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 @Data
@@ -21,6 +18,13 @@ public class View extends BaseEntity {
 
     @OneToMany(mappedBy = "view")
     private Set<ViewColumn> columns;
+
+    @OneToOne
+    @JoinColumn(name = "main_id")
+    private MainViewTable mainTable;
+
+    @OneToMany(mappedBy = "view")
+    private Set<JoinViewTable> joinTables;
 
 }
 
