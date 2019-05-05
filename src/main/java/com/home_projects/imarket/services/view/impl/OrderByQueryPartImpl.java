@@ -13,7 +13,7 @@ public class OrderByQueryPartImpl implements OrderByQueryPart {
     }
 
     @Override
-    public QueryPart add(Object content) {
+    public QueryPart add(Object content, String alias) {
         return null;
     }
 

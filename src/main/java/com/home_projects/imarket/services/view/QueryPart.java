@@ -4,6 +4,6 @@ public interface QueryPart {
 
     QueryPart init(Object content);
 
-    QueryPart add(Object content);
+    QueryPart add(Object content, String alias);
 
 }

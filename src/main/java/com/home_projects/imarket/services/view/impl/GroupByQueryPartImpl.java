@@ -13,7 +13,7 @@ public class GroupByQueryPartImpl implements GroupByQueryPart {
     }
 
     @Override
-    public QueryPart add(Object content) {
+    public QueryPart add(Object content, String alias) {
         return null;
     }
 

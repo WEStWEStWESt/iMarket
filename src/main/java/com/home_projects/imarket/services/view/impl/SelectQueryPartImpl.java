@@ -2,9 +2,11 @@ package com.home_projects.imarket.services.view.impl;
 
 import com.home_projects.imarket.models.view.Field;
 import com.home_projects.imarket.models.view.MainViewTable;
+import com.home_projects.imarket.services.view.CustomQuery;
 import com.home_projects.imarket.services.view.QueryPart;
 import com.home_projects.imarket.services.view.SelectQueryPart;
-import org.apache.logging.log4j.util.Strings;
+import com.home_projects.imarket.util.APIConstants;
+import com.home_projects.imarket.util.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -21,7 +23,7 @@ public class SelectQueryPartImpl implements SelectQueryPart {
         tokens = new HashMap<>();
         if (content == null) return this;
         if (content instanceof Boolean) {
-            tokens.put(Strings.EMPTY, Token
+            tokens.put(StringUtils.getEmpty(), Token
                     .builder()
                     .content("count(*)")
                     .build());
@@ -40,8 +42,17 @@ public class SelectQueryPartImpl implements SelectQueryPart {
     }
 
     @Override
-    public QueryPart add(Object content) {
-        return null;
+    public QueryPart add(Object content, String alias) {
+        if (tokens != null) {
+            List<Field> fields = (List<Field>) content;
+            boolean hasAlias = !alias.isEmpty();
+            if (!fields.isEmpty()) {
+                for (Field field : fields) {
+                    String tableName =  field.getJoined() ? field.getJoinTable().getJoinTableName() : field.getMainTable().getMainTableName();
+                }
+            }
+        } else CustomQuery.log("Cannot edit SELECT part: " + APIConstants.VIEW_SELECT_CONTENT_IS_EMPTY, true);
+        return this;
     }
 
 }

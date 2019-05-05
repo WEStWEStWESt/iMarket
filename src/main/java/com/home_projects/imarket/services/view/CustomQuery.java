@@ -26,7 +26,7 @@ public class CustomQuery implements Query {
 
     @Override
     public void remove(QueryPartType type) {
-
+        if (parts != null) parts.remove(PartType.valueOf(type.name()));
     }
 
     @Override
@@ -71,8 +71,7 @@ public class CustomQuery implements Query {
         return null;
     }
 
-    static String log(String message, boolean positive) {
-
+    public static String log(String message, boolean positive) {
         if (positive) log.debug(message);
         else log.error(message);
         return message;
