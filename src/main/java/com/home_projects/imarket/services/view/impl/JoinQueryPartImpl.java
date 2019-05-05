@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class JoinQueryPartImpl implements JoinQueryPart {
 
     @Override
-    public QueryPart create(Object content) {
+    public QueryPart init(Object content) {
         return null;
     }
 

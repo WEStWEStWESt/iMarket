@@ -1,24 +1,52 @@
 package com.home_projects.imarket.services.view;
 
-import lombok.AccessLevel;
-import lombok.Getter;
+import com.home_projects.imarket.services.view.impl.*;
 
-@Getter(AccessLevel.PACKAGE)
 enum PartType {
 
-    SELECT(SelectQueryPart.class, ", "),
-    FROM(FromQueryPart.class, ""),
-    JOIN(JoinQueryPart.class, " INNER JOIN "),
-    WHERE(WhereQueryPart.class, " AND "),
-    ORDER_BY(OrderByQueryPart.class, ", "),
-    GROUP_BY(GroupByQueryPart.class, ", ");
+    SELECT(", ") {
+        @Override
+        public QueryPart getEmpty() {
+            return new SelectQueryPartImpl();
+        }
+    },
+    FROM("") {
+        @Override
+        public QueryPart getEmpty() {
+            return new FromQueryPartImpl();
+        }
+    },
+    JOIN(" INNER JOIN ") {
+        @Override
+        public QueryPart getEmpty() {
+            return new JoinQueryPartImpl();
+        }
+    },
+    WHERE(" AND ") {
+        @Override
+        public QueryPart getEmpty() {
+            return new WhereQueryPartImpl();
+        }
+    },
+    ORDER_BY(", ") {
+        @Override
+        public QueryPart getEmpty() {
+            return new OrderByQueryPartImpl();
+        }
+    },
+    GROUP_BY(", ") {
+        @Override
+        public QueryPart getEmpty() {
+            return new GroupByQueryPartImpl();
+        }
+    };
 
-    private Class<? extends QueryPart> type;
     private String delimiter;
 
-    PartType(Class<? extends QueryPart> type, String delimiter) {
-        this.type = type;
+    PartType(String delimiter) {
         this.delimiter = delimiter;
     }
+
+    public abstract QueryPart getEmpty();
 
 }

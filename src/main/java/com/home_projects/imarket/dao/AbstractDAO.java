@@ -66,7 +66,7 @@ public abstract class AbstractDAO<T extends BaseEntity> {
             interceptorService.onInit(t);
             return t;
         } catch (IllegalAccessException | InstantiationException e) {
-            throw new RuntimeException("Cannot create instance of: " + type);
+            throw new RuntimeException("Cannot init instance of: " + type);
         }
     }
 

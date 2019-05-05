@@ -6,21 +6,22 @@ import com.home_projects.imarket.models.view.JoinViewTable;
 import com.home_projects.imarket.models.view.MainViewTable;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
-@NoArgsConstructor(staticName = "create")
+@NoArgsConstructor(staticName = "init")
 public class CustomQuery implements Query {
 
-    @Autowired
-    private QueryPartBuilder queryPartBuilder;
+    private Map<PartType, QueryPart> parts = new EnumMap<>(PartType.class);
 
     @Override
     public void clear() {
-
+        if (parts != null) parts.clear();
     }
 
     @Override
@@ -30,12 +31,19 @@ public class CustomQuery implements Query {
 
     @Override
     public Query select(boolean count) {
-        return null;
+        parts.put(PartType.SELECT, PartType.SELECT.getEmpty().init(count ? Boolean.TRUE : null));
+        return this;
     }
 
     @Override
     public Query select(List<Field> fields) {
-        return null;
+        parts.put(PartType.SELECT, PartType.SELECT.getEmpty().init(fields));
+        parts.put(PartType.WHERE, PartType.WHERE
+                .getEmpty()
+                .init(fields.stream()
+                        .map(Field::getFilter)
+                        .collect(Collectors.toList())));
+        return this;
     }
 
     @Override

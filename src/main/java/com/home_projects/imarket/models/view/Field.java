@@ -20,6 +20,8 @@ public class Field extends BaseEntity {
 
     private Boolean sortable;
 
+    private Boolean joined;
+
     @Column(name = "field_number")
     private Integer fieldNumber;
 
