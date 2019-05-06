@@ -11,31 +11,31 @@ public enum PartType {
             return new SelectQueryPartImpl();
         }
     },
-    FROM(" FROM ", "") {
+    FROM("FROM ", "") {
         @Override
         public QueryPart getEmpty() {
             return new FromQueryPartImpl();
         }
     },
-    JOIN(" INNER JOIN ", "") {
+    JOIN("INNER JOIN ", "") {
         @Override
         public QueryPart getEmpty() {
             return new JoinQueryPartImpl();
         }
     },
-    WHERE(" WHERE ", " AND ") {
+    WHERE("WHERE ", " AND ") {
         @Override
         public QueryPart getEmpty() {
             return new WhereQueryPartImpl();
         }
     },
-    ORDER_BY(" ORDER BY ", ", ") {
+    ORDER_BY("ORDER BY ", ", ") {
         @Override
         public QueryPart getEmpty() {
             return new OrderByQueryPartImpl();
         }
     },
-    GROUP_BY(" GROUP BY ", ", ") {
+    GROUP_BY("GROUP BY ", ", ") {
         @Override
         public QueryPart getEmpty() {
             return new GroupByQueryPartImpl();

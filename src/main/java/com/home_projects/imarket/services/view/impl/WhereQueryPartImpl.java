@@ -9,12 +9,17 @@ public class WhereQueryPartImpl implements WhereQueryPart{
 
     @Override
     public QueryPart init(Object content) {
-        return null;
+        return this;
     }
 
     @Override
     public QueryPart add(Object content, String alias) {
-        return null;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 
 }

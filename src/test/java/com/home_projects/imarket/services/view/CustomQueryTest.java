@@ -1,10 +1,13 @@
 package com.home_projects.imarket.services.view;
 
+import com.home_projects.imarket.models.view.Field;
 import com.home_projects.imarket.util.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Collections;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
@@ -43,6 +46,22 @@ public class CustomQueryTest {
         Query query = CustomQuery.init();
         String ACTUAL = query.select(true).add(QueryPartType.SELECT, null).toString();
         String EXPECTED = "SELECT count(*)";
+        assertThat(ACTUAL, is(equalTo(EXPECTED)));
+    }
+
+    @Test
+    public void check_of_select_part_with_empty_content(){
+        Query query = CustomQuery.init();
+        String ACTUAL = query.select(Collections.emptyList()).toString();
+        String EXPECTED = StringUtils.getEmpty();
+        assertThat(ACTUAL, is(equalTo(EXPECTED)));
+    }
+
+    @Test
+    public void check_of_select_part_with_invalid_content(){
+        Query query = CustomQuery.init();
+        String ACTUAL = query.select(Collections.singletonList(new Field())).toString();
+        String EXPECTED = StringUtils.getEmpty();
         assertThat(ACTUAL, is(equalTo(EXPECTED)));
     }
 

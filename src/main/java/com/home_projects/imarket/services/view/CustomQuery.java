@@ -9,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -62,12 +59,14 @@ public class CustomQuery implements Query {
 
     @Override
     public Query select(List<Field> fields) {
-        parts.put(PartType.SELECT, PartType.SELECT.getEmpty().init(fields));
-        parts.put(PartType.WHERE, PartType.WHERE
-                .getEmpty()
-                .init(fields.stream()
-                        .map(Field::getFilter)
-                        .collect(Collectors.toList())));
+        if (isValid(fields)) {
+            parts.put(PartType.SELECT, PartType.SELECT.getEmpty().init(fields));
+            parts.put(PartType.WHERE, PartType.WHERE
+                    .getEmpty()
+                    .init(fields.stream()
+                            .map(Field::getFilter)
+                            .collect(Collectors.toList())));
+        }
         return this;
     }
 
@@ -104,6 +103,12 @@ public class CustomQuery implements Query {
 
     private boolean isEmpty() {
         return parts.isEmpty();
+    }
+
+    private boolean isValid(List<Field> content) {
+        if (content == null) return false;
+        if (content.isEmpty()) return false;
+        return content.stream().noneMatch(f -> f.getFieldName() == null || f.getFieldName().isEmpty());
     }
 
 }
