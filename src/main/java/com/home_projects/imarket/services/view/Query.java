@@ -14,6 +14,10 @@ public interface Query {
 
     void remove(QueryPartType type);
 
+    Query add(QueryPartType type, String alias);
+
+    Query add(QueryPartType type, List<Field> fields, String alias);
+
     Query select(boolean count);
 
     Query select(List<Field> fields);

@@ -5,37 +5,37 @@ import lombok.Getter;
 
 public enum PartType {
 
-    SELECT(", ") {
+    SELECT("SELECT ", ", ") {
         @Override
         public QueryPart getEmpty() {
             return new SelectQueryPartImpl();
         }
     },
-    FROM("") {
+    FROM(" FROM ", "") {
         @Override
         public QueryPart getEmpty() {
             return new FromQueryPartImpl();
         }
     },
-    JOIN(" INNER JOIN ") {
+    JOIN(" INNER JOIN ", "") {
         @Override
         public QueryPart getEmpty() {
             return new JoinQueryPartImpl();
         }
     },
-    WHERE(" AND ") {
+    WHERE(" WHERE ", " AND ") {
         @Override
         public QueryPart getEmpty() {
             return new WhereQueryPartImpl();
         }
     },
-    ORDER_BY(", ") {
+    ORDER_BY(" ORDER BY ", ", ") {
         @Override
         public QueryPart getEmpty() {
             return new OrderByQueryPartImpl();
         }
     },
-    GROUP_BY(", ") {
+    GROUP_BY(" GROUP BY ", ", ") {
         @Override
         public QueryPart getEmpty() {
             return new GroupByQueryPartImpl();
@@ -43,7 +43,15 @@ public enum PartType {
     };
 
     @Getter
+    private String title;
+
+    @Getter
     private String delimiter;
+
+    PartType(String title, String delimiter) {
+        this.title = title;
+        this.delimiter = delimiter;
+    }
 
     PartType(String delimiter) {
         this.delimiter = delimiter;

@@ -25,18 +25,21 @@ public class SelectQueryPartImpl implements SelectQueryPart {
         tokens = new HashMap<>();
         if (content == null) return this;
         if (content instanceof Boolean) {
-            tokens.put(StringUtils.getEmpty(), SelectToken.of((Boolean)content));
-        }
-        List<Field> fields = (List<Field>) content;
-        if (fields.isEmpty()) return this;
-        for (Field field : fields) {
-            MainViewTable mainTable = field.getMainTable();
-            tokens.put(mainTable.getMainTableName(),
-                    SelectToken.builder()
-                            .tableName(mainTable.getMainTableName())
-                            .fieldName(field.getFieldName())
-                            .number(field.getFieldNumber())
-                            .build());
+            if (Boolean.TRUE.equals(content)) {
+                tokens.put(StringUtils.getEmpty(), SelectToken.of(Boolean.TRUE));
+            }
+        } else {
+            List<Field> fields = (List<Field>) content;
+            if (fields.isEmpty()) return this;
+            for (Field field : fields) {
+                MainViewTable mainTable = field.getMainTable();
+                tokens.put(mainTable.getMainTableName(),
+                        SelectToken.builder()
+                                .tableName(mainTable.getMainTableName())
+                                .fieldName(field.getFieldName())
+                                .number(field.getFieldNumber())
+                                .build());
+            }
         }
         return this;
     }
@@ -65,11 +68,15 @@ public class SelectQueryPartImpl implements SelectQueryPart {
 
     @Override
     public String toString() {
-        return tokens.values()
+        return isEmpty() ? StringUtils.getEmpty() : tokens.values()
                 .stream()
                 .sorted()
                 .map(Token::toString)
                 .collect(Collectors.joining(PartType.SELECT.getDelimiter()));
+    }
+
+    private boolean isEmpty() {
+        return tokens == null || tokens.isEmpty();
     }
 
 }

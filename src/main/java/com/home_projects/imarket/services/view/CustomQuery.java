@@ -4,20 +4,33 @@ import com.home_projects.imarket.models.view.Field;
 import com.home_projects.imarket.models.view.Filter;
 import com.home_projects.imarket.models.view.JoinViewTable;
 import com.home_projects.imarket.models.view.MainViewTable;
-import lombok.NoArgsConstructor;
+import com.home_projects.imarket.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
-@NoArgsConstructor(staticName = "init")
 public class CustomQuery implements Query {
 
     private Map<PartType, QueryPart> parts = new EnumMap<>(PartType.class);
+
+    public static Query init() {
+        return new CustomQuery();
+    }
+
+    @Override
+    public String toString() {
+        return isEmpty() ? StringUtils.getEmpty() : parts.keySet()
+                .stream()
+                .map(k -> k.getTitle() + parts.get(k).toString())
+                .collect(Collectors.joining(" "));
+    }
 
     @Override
     public void clear() {
@@ -26,12 +39,24 @@ public class CustomQuery implements Query {
 
     @Override
     public void remove(QueryPartType type) {
-        if (parts != null) parts.remove(PartType.valueOf(type.name()));
+        if (!parts.isEmpty()) parts.remove(PartType.valueOf(type.name()));
+    }
+
+    @Override
+    public Query add(QueryPartType type, @Nullable String alias) {
+        QueryPart part = parts.get(PartType.valueOf(type.name()));
+        if (part != null) part.add(Collections.emptyList(), alias == null ? StringUtils.getEmpty() : alias);
+        return this;
+    }
+
+    @Override
+    public Query add(QueryPartType type, List<Field> fields, String alias) {
+        return null;
     }
 
     @Override
     public Query select(boolean count) {
-        parts.put(PartType.SELECT, PartType.SELECT.getEmpty().init(count ? Boolean.TRUE : null));
+        if (count) parts.put(PartType.SELECT, PartType.SELECT.getEmpty().init(count));
         return this;
     }
 
@@ -75,6 +100,10 @@ public class CustomQuery implements Query {
         if (info) log.info(message);
         else log.debug(message);
         return message;
+    }
+
+    private boolean isEmpty() {
+        return parts.isEmpty();
     }
 
 }
