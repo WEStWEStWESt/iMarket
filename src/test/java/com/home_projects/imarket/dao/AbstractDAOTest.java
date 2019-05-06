@@ -30,9 +30,9 @@ public class AbstractDAOTest {
     private ModelService modelService;
     @PersistenceContext
     private EntityManager entityManager;
-    private static final Long FIRST_ID = 1L;
-    private static final Long SECOND_ID = 2L;
-    private static final Long THIRD_ID = 3L;
+    private static final Long FIRST_ID = 2L;
+    private static final Long SECOND_ID = 3L;
+    private static final Long THIRD_ID = 4L;
 
     @Test
     public void check_of_entity_creation() {

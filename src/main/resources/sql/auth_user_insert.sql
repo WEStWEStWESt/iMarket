@@ -1,4 +1,4 @@
 INSERT INTO authorized_users (id, username, password)
-       VALUES (1,'FirstTestName','PASSWORD1'),
-              (2,'SecondTestName','PASSWORD2'),
-              (3,'ThirdTestName','PASSWORD3');
+       VALUES (2,'FirstTestName','PASSWORD1'),
+              (3,'SecondTestName','PASSWORD2'),
+              (4,'ThirdTestName','PASSWORD3');
