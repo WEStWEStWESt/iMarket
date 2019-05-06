@@ -23,10 +23,4 @@ public class View extends BaseEntity {
     @JoinColumn(name = "main_id")
     private MainViewTable mainTable;
 
-    @OneToMany(mappedBy = "view")
-    private Set<JoinViewTable> joinTables;
-
 }
-
-
-

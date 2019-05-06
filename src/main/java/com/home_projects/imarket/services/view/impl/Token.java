@@ -1,15 +1,12 @@
 package com.home_projects.imarket.services.view.impl;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-class Token {
+class Token implements Comparable<Token> {
 
     private String tableName;
 
@@ -17,6 +14,11 @@ class Token {
 
     private String alias;
 
-    private String content;
+    private int number;
+
+    @Override
+    public int compareTo(Token o) {
+        return Integer.compare(this.number, o.number);
+    }
 
 }

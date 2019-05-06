@@ -1,8 +1,9 @@
 package com.home_projects.imarket.services.view;
 
 import com.home_projects.imarket.services.view.impl.*;
+import lombok.Getter;
 
-enum PartType {
+public enum PartType {
 
     SELECT(", ") {
         @Override
@@ -41,6 +42,7 @@ enum PartType {
         }
     };
 
+    @Getter
     private String delimiter;
 
     PartType(String delimiter) {

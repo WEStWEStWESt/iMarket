@@ -71,9 +71,9 @@ public class CustomQuery implements Query {
         return null;
     }
 
-    public static String log(String message, boolean positive) {
-        if (positive) log.debug(message);
-        else log.error(message);
+    public static String log(String message, boolean info) {
+        if (info) log.info(message);
+        else log.debug(message);
         return message;
     }
 

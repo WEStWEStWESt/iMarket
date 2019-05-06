@@ -18,9 +18,9 @@ public class Field extends BaseEntity {
     @Column(name = "field_name")
     private String fieldName;
 
-    private Boolean sortable;
+    private boolean sortable;
 
-    private Boolean joined;
+    private boolean joined;
 
     @Column(name = "field_number")
     private Integer fieldNumber;
