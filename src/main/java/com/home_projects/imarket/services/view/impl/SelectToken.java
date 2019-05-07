@@ -24,7 +24,7 @@ public class SelectToken extends Token {
         String result;
         String alias = getAlias();
         if (count) result = COUNT_VALUE.replaceAll("\\*", alias != null ? alias : ASTERISK);
-        else result = alias.isEmpty() ? getFieldName() : alias + "." + getFieldName();
+        else result = alias == null || alias.isEmpty() ? getFieldName() : alias + "." + getFieldName();
         return result;
     }
 

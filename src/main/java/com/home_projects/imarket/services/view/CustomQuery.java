@@ -25,6 +25,7 @@ public class CustomQuery implements Query {
     public String toString() {
         return isEmpty() ? StringUtils.getEmpty() : parts.keySet()
                 .stream()
+                .filter(k -> !parts.get(k).isEmpty())
                 .map(k -> k.getTitle() + parts.get(k).toString())
                 .collect(Collectors.joining(" "));
     }
@@ -64,6 +65,7 @@ public class CustomQuery implements Query {
             parts.put(PartType.WHERE, PartType.WHERE
                     .getEmpty()
                     .init(fields.stream()
+                            .filter(field -> field.getFilter() != null)
                             .map(Field::getFilter)
                             .collect(Collectors.toList())));
         }
@@ -102,7 +104,8 @@ public class CustomQuery implements Query {
     }
 
     private boolean isEmpty() {
-        return parts.isEmpty();
+        if (parts.isEmpty()) return true;
+        return parts.values().stream().allMatch(QueryPart::isEmpty);
     }
 
     private boolean isValid(List<Field> content) {

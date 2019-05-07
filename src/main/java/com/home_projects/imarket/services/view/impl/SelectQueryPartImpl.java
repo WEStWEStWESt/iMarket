@@ -32,10 +32,10 @@ public class SelectQueryPartImpl implements SelectQueryPart {
             List<Field> fields = (List<Field>) content;
             if (fields.isEmpty()) return this;
             for (Field field : fields) {
-                MainViewTable mainTable = field.getMainTable();
-                tokens.put(mainTable.getMainTableName(),
+                String tableName = field.isJoined() ? field.getJoinTable().getJoinTableName() : field.getMainTable().getMainTableName();
+                tokens.put(String.valueOf(field.getFieldNumber()),
                         SelectToken.builder()
-                                .tableName(mainTable.getMainTableName())
+                                .tableName(tableName)
                                 .fieldName(field.getFieldName())
                                 .number(field.getFieldNumber())
                                 .build());
@@ -67,16 +67,17 @@ public class SelectQueryPartImpl implements SelectQueryPart {
     }
 
     @Override
+    public boolean isEmpty() {
+        return tokens == null || tokens.isEmpty();
+    }
+
+    @Override
     public String toString() {
         return isEmpty() ? StringUtils.getEmpty() : tokens.values()
                 .stream()
                 .sorted()
                 .map(Token::toString)
                 .collect(Collectors.joining(PartType.SELECT.getDelimiter()));
-    }
-
-    private boolean isEmpty() {
-        return tokens == null || tokens.isEmpty();
     }
 
 }

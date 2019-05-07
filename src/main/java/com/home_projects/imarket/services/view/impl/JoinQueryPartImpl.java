@@ -17,4 +17,9 @@ public class JoinQueryPartImpl implements JoinQueryPart {
         return null;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return true;
+    }
+
 }

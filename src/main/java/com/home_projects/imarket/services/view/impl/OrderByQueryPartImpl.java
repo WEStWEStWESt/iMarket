@@ -17,4 +17,9 @@ public class OrderByQueryPartImpl implements OrderByQueryPart {
         return null;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return true;
+    }
+
 }

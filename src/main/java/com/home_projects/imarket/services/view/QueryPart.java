@@ -6,4 +6,6 @@ public interface QueryPart {
 
     QueryPart add(Object content, String alias);
 
+    boolean isEmpty();
+
 }
