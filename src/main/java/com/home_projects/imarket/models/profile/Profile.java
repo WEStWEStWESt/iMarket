@@ -18,7 +18,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class Profile extends BaseEntity {
 
-    @Column(name = "profilename", length = 50, nullable = false)
+    @Column(name = "profile_name", length = 50, nullable = false)
     private String profileName;
 
     @Column(length = 50)
