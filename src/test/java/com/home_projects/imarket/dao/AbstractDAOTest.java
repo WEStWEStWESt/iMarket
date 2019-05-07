@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 @SpringBootTest
 @SuppressWarnings("ALL")
 @RunWith(SpringRunner.class)
-@Sql({"/sql/auth_user_insert.sql"})
+@Sql({"/auth_user_insert.sql"})
 public class AbstractDAOTest {
 
     @Autowired
