@@ -38,10 +38,11 @@ public class Field extends BaseEntity {
     private JoinViewTable joinTable;
 
     @Builder
-    public Field(Long id, String fieldName, boolean sortable, Integer fieldNumber, Filter filter, MainViewTable mainTable, JoinViewTable joinTable) {
+    public Field(Long id, String fieldName, boolean sortable, boolean joined, Integer fieldNumber, Filter filter, MainViewTable mainTable, JoinViewTable joinTable) {
         setId(id);
         this.fieldName = fieldName;
         this.sortable = sortable;
+        this.joined = joined;
         this.fieldNumber = fieldNumber;
         this.filter = filter;
         this.mainTable = mainTable;

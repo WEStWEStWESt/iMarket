@@ -1,6 +1,7 @@
 package com.home_projects.imarket.services.view;
 
 import com.home_projects.imarket.models.view.Field;
+import com.home_projects.imarket.models.view.JoinViewTable;
 import com.home_projects.imarket.models.view.MainViewTable;
 import com.home_projects.imarket.util.StringUtils;
 import org.junit.Test;
@@ -134,8 +135,24 @@ public class CustomQueryTest {
                         .fieldNumber(3)
                         .build()))
                 .add(QueryPartType.SELECT, "m")
+                .add(QueryPartType.SELECT, Arrays.asList(
+                        Field
+                                .builder()
+                                .fieldName("field1")
+                                .joinTable(JoinViewTable.builder().joinTableName("join").build())
+                                .fieldNumber(4)
+                                .joined(true)
+                                .build(),
+                        Field
+                                .builder()
+                                .fieldName("field2")
+                                .joinTable(JoinViewTable.builder().joinTableName("join").build())
+                                .fieldNumber(5)
+                                .joined(true)
+                                .build()
+                ), "j")
                 .toString();
-        String EXPECTED = "SELECT m.field1, m.field2, m.field3";
+        String EXPECTED = "SELECT m.field1, m.field2, m.field3, j.field1, j.field2";
         assertThat(ACTUAL, is(equalTo(EXPECTED)));
     }
 

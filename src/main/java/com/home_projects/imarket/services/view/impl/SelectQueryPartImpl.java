@@ -1,7 +1,6 @@
 package com.home_projects.imarket.services.view.impl;
 
 import com.home_projects.imarket.models.view.Field;
-import com.home_projects.imarket.models.view.MainViewTable;
 import com.home_projects.imarket.services.view.CustomQuery;
 import com.home_projects.imarket.services.view.PartType;
 import com.home_projects.imarket.services.view.QueryPart;
@@ -52,15 +51,15 @@ public class SelectQueryPartImpl implements SelectQueryPart {
                 List<Field> fields = (List<Field>) content;
                 if (!fields.isEmpty()) {
                     for (Field field : fields) {
-                        String tableName =  field.isJoined() ? field.getJoinTable().getJoinTableName() : field.getMainTable().getMainTableName();
-                        tokens.put(tableName, SelectToken.builder()
+                        String tableName = field.isJoined() ? field.getJoinTable().getJoinTableName() : field.getMainTable().getMainTableName();
+                        tokens.put(String.valueOf(field.getFieldNumber()), SelectToken.builder()
                                 .fieldName(field.getFieldName())
                                 .number(field.getFieldNumber())
                                 .tableName(tableName)
                                 .alias(alias)
                                 .build());
                     }
-                } tokens.values().forEach(f -> f.setAlias(alias));
+                } else tokens.values().forEach(f -> f.setAlias(alias));
             } else CustomQuery.log(MESSAGE_PREFIX + APIConstants.VIEW_SELECT_ALIAS_IS_EMPTY, true);
         } else CustomQuery.log(MESSAGE_PREFIX + APIConstants.VIEW_SELECT_CONTENT_IS_EMPTY, true);
         return this;
