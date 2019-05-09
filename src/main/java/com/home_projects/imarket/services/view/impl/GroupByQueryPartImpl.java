@@ -17,4 +17,9 @@ public class GroupByQueryPartImpl implements GroupByQueryPart {
         return null;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return true;
+    }
+
 }

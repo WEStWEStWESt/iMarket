@@ -9,7 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.Nullable;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -25,6 +28,7 @@ public class CustomQuery implements Query {
     public String toString() {
         return isEmpty() ? StringUtils.getEmpty() : parts.keySet()
                 .stream()
+                .filter(k -> !parts.get(k).isEmpty())
                 .map(k -> k.getTitle() + parts.get(k).toString())
                 .collect(Collectors.joining(" "));
     }
@@ -47,8 +51,10 @@ public class CustomQuery implements Query {
     }
 
     @Override
-    public Query add(QueryPartType type, List<Field> fields, String alias) {
-        return null;
+    public Query add(QueryPartType type, @Nullable List<Field> fields, @Nullable String alias) {
+        QueryPart part = parts.get(PartType.valueOf(type.name()));
+        if (part != null) part.add(fields, alias == null ? StringUtils.getEmpty() : alias);
+        return this;
     }
 
     @Override
@@ -64,6 +70,7 @@ public class CustomQuery implements Query {
             parts.put(PartType.WHERE, PartType.WHERE
                     .getEmpty()
                     .init(fields.stream()
+                            .filter(field -> field.getFilter() != null)
                             .map(Field::getFilter)
                             .collect(Collectors.toList())));
         }
@@ -102,7 +109,8 @@ public class CustomQuery implements Query {
     }
 
     private boolean isEmpty() {
-        return parts.isEmpty();
+        if (parts.isEmpty()) return true;
+        return parts.values().stream().allMatch(QueryPart::isEmpty);
     }
 
     private boolean isValid(List<Field> content) {

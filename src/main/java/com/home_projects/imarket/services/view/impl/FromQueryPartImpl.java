@@ -17,4 +17,9 @@ public class FromQueryPartImpl implements FromQueryPart {
         return null;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return true;
+    }
+
 }
