@@ -20,8 +20,25 @@ public class CustomQuery implements Query {
 
     private Map<PartType, QueryPart> parts = new EnumMap<>(PartType.class);
 
-    public static Query init() {
-        return new CustomQuery();
+    public static Query init(MainViewTable mainViewTable) {
+        Query query = null;
+        if (mainViewTable != null){
+            if (mainViewTable.getMainTableName() != null && !mainViewTable.getMainTableName().isEmpty()){
+               if (mainViewTable.getFields() != null){
+                   int invalidValues = 0;
+                   for (Field field: mainViewTable.getFields() ) {
+                       if (field.getFieldName() == null || field.getFieldName().isEmpty()) {
+                           invalidValues++;
+                           break;
+                       }
+                   }
+                   if (invalidValues == 0) {
+                       query = new CustomQuery();
+                   }
+               }
+            }
+        }
+        return query;
     }
 
     @Override
